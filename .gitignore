@@ -1,0 +1,15 @@
+﻿################################################################################
+# この .gitignore ファイルは Microsoft(R) Visual Studio によって自動的に作成されました。
+################################################################################
+
+.vs/
+
+.git/
+
+DesignTool/My Project/
+
+DesignTool/obj/
+
+Setup/Setup/Debug/
+
+Setup/Setup/Release/
