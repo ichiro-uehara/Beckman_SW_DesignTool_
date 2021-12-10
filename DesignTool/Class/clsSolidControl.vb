@@ -559,16 +559,16 @@ Public Class clsSolidControl
 
             Dim compCSVData2 As List(Of String) = New List(Of String)
 
-            Dim oldTableList As New List(Of TableAnnotation)
-            Dim newTableList As New List(Of TableAnnotation)
+            'Dim oldTableList As New List(Of TableAnnotation)
+            'Dim newTableList As New List(Of TableAnnotation)
 
-            If oldLayerT.Count > newLayerT.Count Then
-                oldTableList = oldLayerT
-            End If
+            'If oldLayerT.Count > newLayerT.Count Then
+            '    oldTableList = oldLayerT
+            'End If
 
-            If oldLayerT.Count < newLayerT.Count Then
-                newTableList = newLayerT
-            End If
+            'If oldLayerT.Count < newLayerT.Count Then
+            '    newTableList = newLayerT
+            'End If
 
             'For i As Integer = 0 To oldLayerT.Count - 1
             '    Dim existTable As Boolean = False
@@ -867,16 +867,33 @@ Public Class clsSolidControl
                 End If
             Next
 
-            If oldLayerT.Count <> 0 Or newLayerT.Count <> 0 Then
-                If oldTableList.Count <> 0 Then
-                    noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
-                ElseIf newTableList.Count <> 0 Then
-                    noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
-                Else
-                    noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
-                End If
-            End If
+            'If oldLayerT.Count <> 0 Or newLayerT.Count <> 0 Then
+            '    If oldTableList.Count <> 0 Then
+            '        noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+            '    ElseIf newTableList.Count <> 0 Then
+            '        noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
+            '    Else
+            '        compCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+            '    End If
+            'End If
 
+            If Math.Abs(oldLayerT.Count - newLayerT.Count) > 0 Then
+                ' 数が違う場合、不一致リストに部品表の文字を追加
+                If oldLayerT.Count > newLayerT.Count Then
+                    For j As Integer = 0 To oldLayerT.Count - newLayerT.Count - 1
+                        noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+                    Next
+                Else
+                    For j As Integer = 0 To newLayerT.Count - oldLayerT.Count - 1
+                        noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
+                    Next
+                End If
+            ElseIf oldLayerT.Count > 0 Then
+                ' 同じ数の場合、一致リストに部品表の文字を追加
+                For j As Integer = 0 To oldLayerT.Count - 1
+                    compCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+                Next
+            End If
 
             swApp.ActivateDoc(swOldModel.GetPathName)
 
@@ -910,9 +927,9 @@ Public Class clsSolidControl
                 Next
             End If
 
-            If oldTableList.Count > 0 Then
-                For j As Integer = 0 To oldTableList.Count - 1
-                    oldTableList(j).GetAnnotation.Layer = oldLayerTName(j)
+            If oldLayerT.Count > newLayerT.Count Then
+                For j As Integer = 0 To oldLayerT.Count - newLayerT.Count - 1
+                    oldLayerT(j).GetAnnotation.Layer = oldLayerTName(j)
                 Next
             End If
 
@@ -950,9 +967,9 @@ Public Class clsSolidControl
                 Next
             End If
 
-            If newTableList.Count > 0 Then
-                For j As Integer = 0 To newTableList.Count - 1
-                    newTableList(j).GetAnnotation.Layer = newLayerTName(j)
+            If newLayerT.Count > oldLayerT.Count Then
+                For j As Integer = 0 To newLayerT.Count - oldLayerT.Count - 1
+                    newLayerT(j).GetAnnotation.Layer = newLayerTName(j)
                 Next
             End If
 
