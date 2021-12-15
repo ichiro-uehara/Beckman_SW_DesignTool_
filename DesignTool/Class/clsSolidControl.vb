@@ -148,6 +148,8 @@ Public Class clsSolidControl
             Dim color1 As Integer = RGB(255, 0, 0)
             Dim color2 As Integer = RGB(0, 255, 0)
 
+            Dim thred As Integer = 0
+
             Dim SheetChange As Object
             SheetChange = New clsSheetChange()
             Dim ary As ArrayList = SheetChange.LoadIniData("[SheetColor1]")
@@ -164,6 +166,11 @@ Public Class clsSolidControl
                 If arr.Length = 3 Then
                     color2 = RGB(CInt(arr(0)), CInt(arr(1)), CInt(arr(2)))
                 End If
+            End If
+
+            Dim ary3 As ArrayList = SheetChange.LoadIniData("[Threshold]")
+            If ary3 IsNot Nothing Then
+                thred = CInt(ary3(0))
             End If
 
             swApp.ArrangeWindows(2)
@@ -559,16 +566,16 @@ Public Class clsSolidControl
 
             Dim compCSVData2 As List(Of String) = New List(Of String)
 
-            'Dim oldTableList As New List(Of TableAnnotation)
-            'Dim newTableList As New List(Of TableAnnotation)
+            Dim oldTableList As New List(Of TableAnnotation)
+            Dim newTableList As New List(Of TableAnnotation)
 
-            'If oldLayerT.Count > newLayerT.Count Then
-            '    oldTableList = oldLayerT
-            'End If
+            If oldLayerT.Count > newLayerT.Count Then
+                oldTableList = oldLayerT
+            End If
 
-            'If oldLayerT.Count < newLayerT.Count Then
-            '    newTableList = newLayerT
-            'End If
+            If oldLayerT.Count < newLayerT.Count Then
+                newTableList = newLayerT
+            End If
 
             'For i As Integer = 0 To oldLayerT.Count - 1
             '    Dim existTable As Boolean = False
@@ -607,7 +614,8 @@ Public Class clsSolidControl
                 Dim safeFlag2 As Boolean = False
                 Dim newSpt() As String = Split(newCsvData(i), clsDesignTool.m_SepValue)
                 'Dim used As Integer = 0
-                Dim xp As Double = 100000
+                Dim ct As Integer = 0
+                Dim xp As Double = thred
                 'Dim yp As Double = 200
 
                 For j As Integer = 0 To oldCsvData.Count - 1
@@ -671,25 +679,31 @@ Public Class clsSolidControl
                         'CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
                         ' 使用済no格納
                         'usedNo.Add(j)
-                        If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= xp) Then
+
+                        If (thred = 0 And ct = 0) Then
+                            CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
+                            xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
+                            ct = 1
+                        Else
+                            If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= xp) Then
                                 'used = j
                                 CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
                                 xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
-                                'yp = Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             End If
+                        End If
 
-                            ' 一致フラグON
-                            safeFlag2 = True
-                        'Exit For
-                        'End If
+                        ' 一致フラグON
+                        safeFlag2 = True
+                            'Exit For
+                            'End If
 
-                        ' 使用済no格納
-                        'usedNo.Add(j)
-                        '    ' 一致フラグON
-                        '    safeFlag = True
-                        '    Exit For
+                            ' 使用済no格納
+                            'usedNo.Add(j)
+                            '    ' 一致フラグON
+                            '    safeFlag = True
+                            '    Exit For
 
-                    End If
+                        End If
                 Next
 
                 If safeFlag2 = True Then
@@ -727,7 +741,8 @@ Public Class clsSolidControl
                 Dim safeFlag2 As Boolean = False
                 Dim oldSpt() As String = Split(oldCsvData(i), clsDesignTool.m_SepValue)
                 'Dim used As Integer = 0
-                Dim xp As Double = 100000
+                Dim ct As Integer = 0
+                Dim xp As Double = thred
 
                 For j As Integer = 0 To newCsvData.Count - 1
                     Dim isSafe = False
@@ -791,14 +806,21 @@ Public Class clsSolidControl
                         ' 使用済no格納
                         'usedNo.Add(j)
                         'If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) <= xp And Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= yp) Then
-                        If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= xp) Then
+
+                        If (thred = 0 And ct = 0) Then
+                            CompCsv = newCsvData(j) + clsDesignTool.m_SepValue + oldCsvData(i)
+                            xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
+                            ct = 1
+                        Else
+                            If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= xp) Then
                                 'used = j
                                 CompCsv = newCsvData(j) + clsDesignTool.m_SepValue + oldCsvData(i)
                                 xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
-                                'yp = Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             End If
-                            ' 一致フラグON
-                            safeFlag2 = True
+                        End If
+
+                        ' 一致フラグON
+                        safeFlag2 = True
 
                         'Exit For
                         'End If
@@ -851,49 +873,105 @@ Public Class clsSolidControl
                 Next
             Next
 
+            Dim oldCsvData2 As New List(Of String)
+            Dim newCsvData2 As New List(Of String)
+            Dim ilist1_2 As List(Of Integer) = New List(Of Integer)
+            Dim ilist2_2 As List(Of Integer) = New List(Of Integer)
+
             For i As Integer = 0 To compCSVData2.Count - 1
                 If compCSVData2(i) IsNot "0" Then
-                    newAnnotations.Add(annotations(ilist(i)))
-                    viewNewData.Add(newCsvData(ilist(i)))
-                    noCompCSVData.Add(newCsvData(ilist(i)))
+                    newCsvData2.Add(newCsvData(ilist(i)))
+                    ilist1_2.Add(ilist(i))
+                    'newAnnotations.Add(annotations(ilist(i)))
+                    'viewNewData.Add(newCsvData(ilist(i)))
+                    'noCompCSVData.Add(newCsvData(ilist(i)))
                 End If
             Next
 
             For i As Integer = 0 To compCSVData3.Count - 1
                 If compCSVData3(i) IsNot "0" Then
-                    newAnnotations2.Add(annotations2(ilist2(i)))
-                    viewOldData.Add(oldCsvData(ilist2(i)))
-                    noCompCSVData.Add(oldCsvData(ilist2(i)))
+                    oldCsvData2.Add(oldCsvData(ilist2(i)))
+                    ilist2_2.Add(ilist2(i))
+                    'newAnnotations2.Add(annotations2(ilist2(i)))
+                    'viewOldData.Add(oldCsvData(ilist2(i)))
+                    'noCompCSVData.Add(oldCsvData(ilist2(i)))
                 End If
             Next
 
-            'If oldLayerT.Count <> 0 Or newLayerT.Count <> 0 Then
-            '    If oldTableList.Count <> 0 Then
-            '        noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
-            '    ElseIf newTableList.Count <> 0 Then
-            '        noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
-            '    Else
-            '        compCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
-            '    End If
-            'End If
-
-            If Math.Abs(oldLayerT.Count - newLayerT.Count) > 0 Then
-                ' 数が違う場合、不一致リストに部品表の文字を追加
-                If oldLayerT.Count > newLayerT.Count Then
-                    For j As Integer = 0 To oldLayerT.Count - newLayerT.Count - 1
-                        noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
-                    Next
-                Else
-                    For j As Integer = 0 To newLayerT.Count - oldLayerT.Count - 1
-                        noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
-                    Next
+            For i As Integer = 0 To newCsvData2.Count - 1
+                If newCsvData2(i) = "0" Then
+                    Continue For
                 End If
-            ElseIf oldLayerT.Count > 0 Then
-                ' 同じ数の場合、一致リストに部品表の文字を追加
-                For j As Integer = 0 To oldLayerT.Count - 1
-                    compCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+                Dim newSpt() As String = Split(newCsvData2(i), clsDesignTool.m_SepValue)
+                Dim ct As Integer = 0
+                Dim xp As Integer = thred
+                Dim newd As Integer = 0
+                Dim oldd As Integer = 0
+                CompCsv2 = Nothing
+
+
+                For j As Integer = 0 To oldCsvData2.Count - 1
+                    If oldCsvData2(j) = "0" Then
+                        Continue For
+                    End If
+                    Dim oldSpt() As String = Split(oldCsvData2(j), clsDesignTool.m_SepValue)
+
+                    If oldSpt(1) = newSpt(1) And
+                           oldSpt(4) = newSpt(4) And
+                           oldSpt(5) = newSpt(5) And
+                           oldSpt(6) = newSpt(6) And
+                           oldSpt(7) = newSpt(7) Then
+
+                        If (thred = 0 And ct = 0) Then
+                            CompCsv2 = newCsvData2(i) + clsDesignTool.m_SepValue + oldCsvData2(j)
+                            newd = i
+                            oldd = j
+                            xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
+                            ct = 1
+                        Else
+                            If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= xp) Then
+                                newd = i
+                                oldd = j
+                                CompCsv2 = newCsvData2(i) + clsDesignTool.m_SepValue + oldCsvData2(j)
+                                xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
+                            End If
+                        End If
+                    End If
                 Next
+
+                If CompCsv2 IsNot Nothing Then
+                    compCSVData.Add(CompCsv2)
+                    newCsvData2(newd) = "0"
+                    oldCsvData2(oldd) = "0"
+                End If
+            Next
+
+            For i As Integer = 0 To newCsvData2.Count - 1
+                If newCsvData2(i) IsNot "0" Then
+                    newAnnotations.Add(annotations(ilist1_2(i)))
+                    viewNewData.Add(newCsvData(ilist1_2(i)))
+                    noCompCSVData.Add(newCsvData(ilist1_2(i)))
+                End If
+            Next
+
+            For i As Integer = 0 To oldCsvData2.Count - 1
+                If oldCsvData2(i) IsNot "0" Then
+                    newAnnotations2.Add(annotations2(ilist2_2(i)))
+                    viewOldData.Add(oldCsvData(ilist2_2(i)))
+                    noCompCSVData.Add(oldCsvData(ilist2_2(i)))
+                End If
+            Next
+
+            If oldLayerT.Count <> 0 Or newLayerT.Count <> 0 Then
+                If oldTableList.Count <> 0 Then
+                    noCompCSVData.Add(modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+                ElseIf newTableList.Count <> 0 Then
+                    noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表")
+                Else
+                    noCompCSVData.Add(modelNameNew + clsDesignTool.m_SepValue + " " + "部品表" + clsDesignTool.m_SepValue + " " + modelNameOld + clsDesignTool.m_SepValue + " " + "部品表")
+                End If
             End If
+
 
             swApp.ActivateDoc(swOldModel.GetPathName)
 
@@ -927,9 +1005,9 @@ Public Class clsSolidControl
                 Next
             End If
 
-            If oldLayerT.Count > newLayerT.Count Then
-                For j As Integer = 0 To oldLayerT.Count - newLayerT.Count - 1
-                    oldLayerT(j).GetAnnotation.Layer = oldLayerTName(j)
+            If oldTableList.Count > 0 Then
+                For j As Integer = 0 To oldTableList.Count - 1
+                    oldTableList(j).GetAnnotation.Layer = oldLayerTName(j)
                 Next
             End If
 
@@ -967,9 +1045,9 @@ Public Class clsSolidControl
                 Next
             End If
 
-            If newLayerT.Count > oldLayerT.Count Then
-                For j As Integer = 0 To newLayerT.Count - oldLayerT.Count - 1
-                    newLayerT(j).GetAnnotation.Layer = newLayerTName(j)
+            If newTableList.Count > 0 Then
+                For j As Integer = 0 To newTableList.Count - 1
+                    newTableList(j).GetAnnotation.Layer = newLayerTName(j)
                 Next
             End If
 
