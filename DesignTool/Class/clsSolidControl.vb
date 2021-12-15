@@ -168,24 +168,11 @@ Public Class clsSolidControl
                 End If
             End If
 
-            ' uehara del しきい値の設定をコメントアウト
-            ' 理由；仕様書の変更等も行わないと行けないので、しきい値なしで行けるならこのままいく
-            ' 但し、やはり、しきい値チェックが必要となった場合、戻せるようにコードを保存しておく。
-
-            ' Setting.ini
-            ' ****************************************************
-            ' #　内容：一致アイテム座標　許容距離
-            ' #　備考：-1の場合は、距離チェックを行わない
-            ' #　設定日：2021/12/14
-            ' [Threshold]
-            ' -1
-            ' ****************************************************
-
             ' しきい値を取得
-            'Dim ary3 As ArrayList = SheetChange.LoadIniData("[Threshold]")
-            'If ary3 IsNot Nothing Then
-            '    thred = CInt(ary3(0))
-            'End If
+            Dim ary3 As ArrayList = SheetChange.LoadIniData("[Threshold]")
+            If ary3 IsNot Nothing Then
+                thred = CInt(ary3(0))
+            End If
 
             swApp.ArrangeWindows(2)
 
