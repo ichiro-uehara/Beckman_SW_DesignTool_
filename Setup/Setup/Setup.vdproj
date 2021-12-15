@@ -15,18 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_28409FED5DC6495483A70F960A22A468"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4F6D2C6C8293A37D4F051F9779C83C7B"
-        "OwnerKey" = "8:_28409FED5DC6495483A70F960A22A468"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9183242275CC4FFD93FF7F6EB7DEAC24"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,20 +27,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DACC573894BF43AAAE46F5218C461595"
+        "MsmKey" = "8:_CDA1B0BD1E414FC9816E41FF9261F886"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_28409FED5DC6495483A70F960A22A468"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4F6D2C6C8293A37D4F051F9779C83C7B"
+        "MsmKey" = "8:_DACC573894BF43AAAE46F5218C461595"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -180,7 +162,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:v4.0 Client    "
+                "FrameworkVersion" = "8:v4.0 Client      "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -188,68 +170,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_28409FED5DC6495483A70F960A22A468"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_28409FED5DC6495483A70F960A22A468"
-                    {
-                    "Name" = "8:DesignTool.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\Files\\DesignTool.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F1D4894ACB8942FAA5E08E119B489F05"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4F6D2C6C8293A37D4F051F9779C83C7B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:SolidWorksTools, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bd18593873b4686d, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_4F6D2C6C8293A37D4F051F9779C83C7B"
-                    {
-                    "Name" = "8:SolidWorksTools.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:SolidWorksTools.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F1D4894ACB8942FAA5E08E119B489F05"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9183242275CC4FFD93FF7F6EB7DEAC24"
             {
             "SourcePath" = "8:..\\Script\\Uninstall.vbs"
@@ -274,6 +194,37 @@
             {
             "SourcePath" = "8:..\\Script\\Install.vbs"
             "TargetName" = "8:Install.vbs"
+            "Tag" = "8:"
+            "Folder" = "8:_F1D4894ACB8942FAA5E08E119B489F05"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CDA1B0BD1E414FC9816E41FF9261F886"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CDA1B0BD1E414FC9816E41FF9261F886"
+                    {
+                    "Name" = "8:DesignTool.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\Files\\DesignTool.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F1D4894ACB8942FAA5E08E119B489F05"
             "Condition" = "8:"
@@ -366,15 +317,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SW設計用アドイン"
-        "ProductCode" = "8:{AEF25958-DD61-4DC2-82F4-07D46AB9FB03}"
-        "PackageCode" = "8:{8382100A-99AD-4709-84DA-5CD3161D9016}"
+        "ProductCode" = "8:{36EBD835-A7F6-4568-AEA5-D27CBE0EAE26}"
+        "PackageCode" = "8:{CF92F129-EDD8-4CDF-A34D-788997225F01}"
         "UpgradeCode" = "8:{F7E7B7B7-1F44-4AC4-99AD-E4FE59B3DDB7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:ソフトキューブ株式会社"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

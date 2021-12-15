@@ -1,9 +1,6 @@
 Option Explicit
 On Error Resume Next
 
-Dim dllName
-dllName = "MakeTitleBlock.dll"
-
 '----------------------------------------------------------------------------
 ' 対象プログラムのパス
 '----------------------------------------------------------------------------
@@ -13,16 +10,14 @@ dllName = "MakeTitleBlock.dll"
 Dim ProgramPath
 ProgramPath = """" & Property("CustomActionData") & dllName & """"
 
-'msgbox ProgramPath
+' msgbox ProgramPath
 
-Sub UnRegistAssembly(wshShell, dllName, programPath)
+Sub RegistAssembly(wshShell)
 	Dim commandLine
-	
-	commandLine = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe "'64bit compile
-	commandLine = commandLine & "C:\Softcube\DesignTool\DesignTool.dll"
-	commandLine = commandLine & " /u"
 
-    'msgbox commandLine
+    commandLine = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe "'64bit compile
+ 	commandLine = commandLine & "C:\Softcube\DesignTool\DesignTool.dll"
+	commandLine = commandLine & " /u"
 
 	wshShell.Run commandLine, 0, true
 
@@ -30,10 +25,16 @@ End Sub
 
 Dim wshShell
 Dim osVersion
+Dim obj
+
+Set obj = Wscript.CreateObject("Shell.Application")
+if Wscript.Arguments.Count = 0 then
+obj.ShellExecute "wscript.exe", WScript.ScriptFullName & " runas", "", "runas", 1
+Wscript.Quit
+end if
 
 Set wshShell = CreateObject("WScript.Shell")
 
-UnRegistAssembly wshShell, dllName, ProgramPath
+RegistAssembly wshShell
 
 Set wshShell = Nothing
-
