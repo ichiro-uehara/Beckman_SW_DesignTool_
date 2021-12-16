@@ -187,28 +187,30 @@ Public Class clsSolidControl
                     swDraw = swNewModel
                 End If
 
-                sheetNames = swDraw.GetSheetNames()
-                Dim sketchMgr As SketchManager = swDraw.SketchManager
+                For j As Integer = 0 To 2
+                    sheetNames = swDraw.GetSheetNames()
+                    Dim sketchMgr As SketchManager = swDraw.SketchManager
 
-                Dim skBlocks As Object = sketchMgr.GetSketchBlockDefinitions
-                If Not skBlocks Is Nothing Then
+                    Dim skBlocks As Object = sketchMgr.GetSketchBlockDefinitions
+                    If Not skBlocks Is Nothing Then
 
-                    For Each skblockDef As SketchBlockDefinition In skBlocks
+                        For Each skblockDef As SketchBlockDefinition In skBlocks
 
-                        Dim skInsList As Object = skblockDef.GetInstances()
-                        If Not skInsList Is Nothing Then
+                            Dim skInsList As Object = skblockDef.GetInstances()
+                            If Not skInsList Is Nothing Then
 
-                            For Each skIns As SketchBlockInstance In skInsList
-                                sketchMgr.ExplodeSketchBlockInstance(skIns)
-                            Next
+                                For Each skIns As SketchBlockInstance In skInsList
+                                    sketchMgr.ExplodeSketchBlockInstance(skIns)
+                                Next
 
-                        End If
-                    Next
-                End If
+                            End If
+                        Next
+                    End If
+                Next
 
             Next
 
-            For i As Integer = 0 To 1
+                For i As Integer = 0 To 1
 
                 usedNo = Nothing
                 usedNo = New List(Of Integer)
@@ -681,7 +683,7 @@ Public Class clsSolidControl
                         ' 使用済no格納
                         'usedNo.Add(j)
 
-                        If (thred < 0 And ct = 0) Then
+                        If (thred < -1 And ct = 0) Then
                             CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
                             xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             ct = 1
@@ -808,7 +810,7 @@ Public Class clsSolidControl
                         'usedNo.Add(j)
                         'If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) <= xp And Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= yp) Then
 
-                        If (thred < 0 And ct = 0) Then
+                        If (thred < -1 And ct = 0) Then
                             CompCsv = newCsvData(j) + clsDesignTool.m_SepValue + oldCsvData(i)
                             xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             ct = 1
@@ -1195,36 +1197,37 @@ Public Class clsSolidControl
             Dim tempDblValues() As Double = dimen.GetToleranceValues
             If tempDblValues IsNot Nothing Then
                 If tempDblValues.Length > 1 Then
-                    If dimen.GetToleranceType <> 0 Then
-                        If dimen.GetToleranceType = 2 Or dimen.GetToleranceType = 8 Then
-                            ' 上下寸法
-                            itemSuffix = dimen.Tolerance.GetShaftFitValue
-                            itemSuffix += dimen.Tolerance.GetHoleFitValue
-                            itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
+                    'If dimen.GetToleranceType <> 0 Then
+                    If dimen.GetToleranceType = 2 Or dimen.GetToleranceType = 8 Then
+                        ' 上下寸法
+                        itemSuffix = dimen.Tolerance.GetShaftFitValue
+                        itemSuffix += dimen.Tolerance.GetHoleFitValue
+                        itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
 
-                            If itemType = "swAngularDimension" Then
-                                itemSuffix += "°"
+                        If itemType = "swAngularDimension" Then
+                            itemSuffix += "°"
+                        End If
+
+                        Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString()
+                        If tempStr1 <> "" And tempStr1 <> "0" Then
+                            tempStr1 = MakeZero(tempStr1, torePrecision)
+                            If Double.Parse(tempStr1) > 0.0 Then
+                                tempStr1 = "+" + tempStr1
                             End If
+                        End If
 
-                            Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString()
-                            If tempStr1 <> "" And tempStr1 <> "0" Then
-                                tempStr1 = MakeZero(tempStr1, torePrecision)
-                                If Double.Parse(tempStr1) > 0.0 Then
-                                    tempStr1 = "+" + tempStr1
-                                End If
+                        Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString()
+                        If tempStr2 <> "" And tempStr2 <> "0" Then
+                            tempStr2 = MakeZero(tempStr2, torePrecision)
+                            If Double.Parse(tempStr2) > 0.0 Then
+                                tempStr2 = "+" + tempStr2
                             End If
+                        End If
 
-                            Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString()
-                            If tempStr2 <> "" And tempStr2 <> "0" Then
-                                tempStr2 = MakeZero(tempStr2, torePrecision)
-                                If Double.Parse(tempStr2) > 0.0 Then
-                                    tempStr2 = "+" + tempStr2
-                                End If
-                            End If
-
-                            itemSuffix += tempStr1
-                            itemSuffix += tempStr2
-                        Else
+                        itemSuffix += tempStr1
+                        itemSuffix += tempStr2
+                    Else
+                        If dimen.GetToleranceType <> 0 Then
                             itemSuffix = dimen.Tolerance.GetShaftFitValue
                             itemSuffix += dimen.Tolerance.GetHoleFitValue
                             itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
@@ -1267,13 +1270,25 @@ Public Class clsSolidControl
                                     itemSuffix += tempStr2
                                 End If
                             End If
+                        Else
+                            itemSuffix = dimen.Tolerance.GetShaftFitValue
+                            itemSuffix += dimen.Tolerance.GetHoleFitValue
+                            itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
+
+                            If itemType = "swAngularDimension" Then
+                                itemSuffix += "°"
+                            End If
+
+                            If itemType = "swChamferDimension" Then
+                                If tempDimension.ChamferTextStyle = 4 Then
+                                    itemPrefix += "C"
+                                End If
+                            End If
 
                         End If
-                    Else
-                        itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
                     End If
                 End If
-                Else
+            Else
                 If itemType = "swAngularDimension" Then
                     itemSuffix += "°"
                 End If
