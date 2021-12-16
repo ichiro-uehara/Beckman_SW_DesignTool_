@@ -148,7 +148,7 @@ Public Class clsSolidControl
             Dim color1 As Integer = RGB(255, 0, 0)
             Dim color2 As Integer = RGB(0, 255, 0)
 
-            Dim thred As Integer = 0
+            Dim thred As Integer = -1
 
             Dim SheetChange As Object
             SheetChange = New clsSheetChange()
@@ -168,6 +168,7 @@ Public Class clsSolidControl
                 End If
             End If
 
+            ' しきい値を取得
             Dim ary3 As ArrayList = SheetChange.LoadIniData("[Threshold]")
             If ary3 IsNot Nothing Then
                 thred = CInt(ary3(0))
@@ -680,7 +681,7 @@ Public Class clsSolidControl
                         ' 使用済no格納
                         'usedNo.Add(j)
 
-                        If (thred = 0 And ct = 0) Then
+                        If (thred < 0 And ct = 0) Then
                             CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
                             xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             ct = 1
@@ -807,7 +808,7 @@ Public Class clsSolidControl
                         'usedNo.Add(j)
                         'If (Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) <= xp And Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3))) <= yp) Then
 
-                        If (thred = 0 And ct = 0) Then
+                        If (thred < 0 And ct = 0) Then
                             CompCsv = newCsvData(j) + clsDesignTool.m_SepValue + oldCsvData(i)
                             xp = Math.Abs(CDbl(oldSpt(2)) - CDbl(newSpt(2))) + Math.Abs(CDbl(oldSpt(3)) - CDbl(newSpt(3)))
                             ct = 1
@@ -922,7 +923,7 @@ Public Class clsSolidControl
                            oldSpt(6) = newSpt(6) And
                            oldSpt(7) = newSpt(7) Then
 
-                        If (thred = 0 And ct = 0) Then
+                        If (thred < 0 And ct = 0) Then
                             CompCsv2 = newCsvData2(i) + clsDesignTool.m_SepValue + oldCsvData2(j)
                             newd = i
                             oldd = j
