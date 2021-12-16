@@ -1192,85 +1192,87 @@ Public Class clsSolidControl
 
             ' 接尾表記取得
             Dim tempDblValues() As Double = dimen.GetToleranceValues
-
             If tempDblValues IsNot Nothing Then
                 If tempDblValues.Length > 1 Then
+                    If dimen.GetToleranceType <> 0 Then
+                        If dimen.GetToleranceType = 2 Or dimen.GetToleranceType = 8 Then
+                            ' 上下寸法
+                            itemSuffix = dimen.Tolerance.GetShaftFitValue
+                            itemSuffix += dimen.Tolerance.GetHoleFitValue
+                            itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
 
-                    If dimen.GetToleranceType = 2 Or dimen.GetToleranceType = 8 Then
-                        ' 上下寸法
-                        itemSuffix = dimen.Tolerance.GetShaftFitValue
-                        itemSuffix += dimen.Tolerance.GetHoleFitValue
-                        itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
-
-                        If itemType = "swAngularDimension" Then
-                            itemSuffix += "°"
-                        End If
-
-                        Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString()
-                        If tempStr1 <> "" And tempStr1 <> "0" Then
-                            tempStr1 = MakeZero(tempStr1, torePrecision)
-                            If Double.Parse(tempStr1) > 0.0 Then
-                                tempStr1 = "+" + tempStr1
+                            If itemType = "swAngularDimension" Then
+                                itemSuffix += "°"
                             End If
-                        End If
 
-                        Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString()
-                        If tempStr2 <> "" And tempStr2 <> "0" Then
-                            tempStr2 = MakeZero(tempStr2, torePrecision)
-                            If Double.Parse(tempStr2) > 0.0 Then
-                                tempStr2 = "+" + tempStr2
-                            End If
-                        End If
-
-                        itemSuffix += tempStr1
-                        itemSuffix += tempStr2
-                    Else
-                        itemSuffix = dimen.Tolerance.GetShaftFitValue
-                        itemSuffix += dimen.Tolerance.GetHoleFitValue
-                        itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
-
-                        If itemType = "swAngularDimension" Then
-                            itemSuffix += "°"
-                        End If
-
-                        Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString
-                        Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString
-
-                        If dimen.GetToleranceType = 4 Then
-                            If tempStr1 <> "0" Then
-                                ' 普通許容差
-                                itemSuffix += "±"
+                            Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString()
+                            If tempStr1 <> "" And tempStr1 <> "0" Then
                                 tempStr1 = MakeZero(tempStr1, torePrecision)
-                                itemSuffix += tempStr1
-                            End If
-                        ElseIf dimen.GetToleranceType = 5 Then
-                            ' MIN
-                            itemSuffix += "min."
-                        ElseIf dimen.GetToleranceType = 6 Then
-                            ' MAX
-                            itemSuffix += "max."
-                        Else
-
-                            ' C面取り
-                            If itemType = "swChamferDimension" Then
-                                If tempDimension.ChamferTextStyle = 4 Then
-                                    itemPrefix += "C"
+                                If Double.Parse(tempStr1) > 0.0 Then
+                                    tempStr1 = "+" + tempStr1
                                 End If
                             End If
 
-                            If tempStr1 <> "0" Then
-                                tempStr1 = MakeZero(tempStr1, torePrecision)
-                                itemSuffix += tempStr1
-                            End If
-                            If tempStr2 <> "0" Then
+                            Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString()
+                            If tempStr2 <> "" And tempStr2 <> "0" Then
                                 tempStr2 = MakeZero(tempStr2, torePrecision)
-                                itemSuffix += tempStr2
+                                If Double.Parse(tempStr2) > 0.0 Then
+                                    tempStr2 = "+" + tempStr2
+                                End If
                             End If
-                        End If
 
+                            itemSuffix += tempStr1
+                            itemSuffix += tempStr2
+                        Else
+                            itemSuffix = dimen.Tolerance.GetShaftFitValue
+                            itemSuffix += dimen.Tolerance.GetHoleFitValue
+                            itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
+
+                            If itemType = "swAngularDimension" Then
+                                itemSuffix += "°"
+                            End If
+
+                            Dim tempStr1 As String = Math.Round((tempDblValues(1) * 1000.0), 3).ToString
+                            Dim tempStr2 As String = Math.Round((tempDblValues(0) * 1000.0), 3).ToString
+
+                            If dimen.GetToleranceType = 4 Then
+                                If tempStr1 <> "0" Then
+                                    ' 普通許容差
+                                    itemSuffix += "±"
+                                    tempStr1 = MakeZero(tempStr1, torePrecision)
+                                    itemSuffix += tempStr1
+                                End If
+                            ElseIf dimen.GetToleranceType = 5 Then
+                                ' MIN
+                                itemSuffix += "min."
+                            ElseIf dimen.GetToleranceType = 6 Then
+                                ' MAX
+                                itemSuffix += "max."
+                            Else
+
+                                ' C面取り
+                                If itemType = "swChamferDimension" Then
+                                    If tempDimension.ChamferTextStyle = 4 Then
+                                        itemPrefix += "C"
+                                    End If
+                                End If
+
+                                If tempStr1 <> "0" Then
+                                    tempStr1 = MakeZero(tempStr1, torePrecision)
+                                    itemSuffix += tempStr1
+                                End If
+                                If tempStr2 <> "0" Then
+                                    tempStr2 = MakeZero(tempStr2, torePrecision)
+                                    itemSuffix += tempStr2
+                                End If
+                            End If
+
+                        End If
+                    Else
+                        itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
                     End If
                 End If
-            Else
+                Else
                 If itemType = "swAngularDimension" Then
                     itemSuffix += "°"
                 End If
