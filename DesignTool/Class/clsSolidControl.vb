@@ -210,7 +210,7 @@ Public Class clsSolidControl
 
             Next
 
-                For i As Integer = 0 To 1
+            For i As Integer = 0 To 1
 
                 usedNo = Nothing
                 usedNo = New List(Of Integer)
@@ -254,171 +254,171 @@ Public Class clsSolidControl
                 ' ビューの内容を順番に取得 
                 swView = swDraw.GetFirstView
 
-                    ' ビューの数分ループ
-                    While Not swView Is Nothing
+                ' ビューの数分ループ
+                While Not swView Is Nothing
 
-                        swAnnotations = swView.GetAnnotations
-                        If Not swAnnotations Is Nothing Then
-                            For Each swAnnotation As Annotation In swAnnotations
+                    swAnnotations = swView.GetAnnotations
+                    If Not swAnnotations Is Nothing Then
+                        For Each swAnnotation As Annotation In swAnnotations
 
-                                Dim itemType As String = ""
-                                Dim itemText As String = ""
-                                Dim itemSuffix As String = ""
-                                Dim itemPrefix As String = ""
-                                Dim itemSymbol As String = ""
+                            Dim itemType As String = ""
+                            Dim itemText As String = ""
+                            Dim itemSuffix As String = ""
+                            Dim itemPrefix As String = ""
+                            Dim itemSymbol As String = ""
 
-                                If swAnnotation Is Nothing Then
-                                    Continue For
-                                End If
+                            If swAnnotation Is Nothing Then
+                                Continue For
+                            End If
 
-                                Dim tempObj As Object = swAnnotation.GetPosition()
-                                If tempObj Is Nothing Then
-                                    Continue For
-                                End If
-                                If Double.Parse(tempObj(0)) = 0.0 Or Double.Parse(tempObj(1)) = 0.0 Then
-                                    Continue For
-                                End If
-                                Dim LinearFlag As Integer = 0
+                            Dim tempObj As Object = swAnnotation.GetPosition()
+                            If tempObj Is Nothing Then
+                                Continue For
+                            End If
+                            If Double.Parse(tempObj(0)) = 0.0 Or Double.Parse(tempObj(1)) = 0.0 Then
+                                Continue For
+                            End If
+                            Dim LinearFlag As Integer = 0
 
-                                Select Case swAnnotation.GetType
+                            Select Case swAnnotation.GetType
 
-                                    Case swAnnotationType_e.swNote              ' 注記・バルーン
+                                Case swAnnotationType_e.swNote              ' 注記・バルーン
 
-                                        Try
-                                            Dim tempNote As Note = swAnnotation.GetSpecificAnnotation
-                                            itemType = "swNote"
-                                            itemText = tempNote.GetText()
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
+                                    Try
+                                        Dim tempNote As Note = swAnnotation.GetSpecificAnnotation
+                                        itemType = "swNote"
+                                        itemText = tempNote.GetText()
+                                    Catch ex As Exception
+                                        MsgBox(ex.Message)
+                                    End Try
 
-                                    Case swAnnotationType_e.swSFSymbol          ' 表面粗さ
+                                Case swAnnotationType_e.swSFSymbol          ' 表面粗さ
 
-                                        Try
-                                            itemType = "swSFSymbol"
-                                            Dim tempSymbol As SFSymbol = swAnnotation.GetSpecificAnnotation
-                                            ' 後で変える
-                                            'itemText = tempSymbol.GetText(swDimensionTextParts_e.swDimensionTextPrefix)
+                                    Try
+                                        itemType = "swSFSymbol"
+                                        Dim tempSymbol As SFSymbol = swAnnotation.GetSpecificAnnotation
+                                        ' 後で変える
+                                        'itemText = tempSymbol.GetText(swDimensionTextParts_e.swDimensionTextPrefix)
 
-                                            For k As Integer = 0 To tempSymbol.GetTextCount - 1
-                                                itemText += tempSymbol.GetTextAtIndex(k)
-                                            Next
+                                        For k As Integer = 0 To tempSymbol.GetTextCount - 1
+                                            itemText += tempSymbol.GetTextAtIndex(k)
+                                        Next
 
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-                                    Case swAnnotationType_e.swDisplayDimension  ' 寸法線
+                                    Catch ex As Exception
+                                        MsgBox(ex.Message)
+                                    End Try
+                                Case swAnnotationType_e.swDisplayDimension  ' 寸法線
 
-                                        Dim swModel As ModelDoc2 = Nothing
-                                        If i = 0 Then
-                                            swModel = swOldModel
-                                        Else
-                                            swModel = swNewModel
-                                        End If
-                                        If GetDimensionData(swModel, swAnnotation,
+                                    Dim swModel As ModelDoc2 = Nothing
+                                    If i = 0 Then
+                                        swModel = swOldModel
+                                    Else
+                                        swModel = swNewModel
+                                    End If
+                                    If GetDimensionData(swModel, swAnnotation,
                                                             itemType, itemText, itemPrefix, itemSuffix, itemSymbol) = False Then
-                                            Continue For
-                                        End If
-
-                                    Case swAnnotationType_e.swDatumTag          ' データム記号
-                                        Try
-                                            itemType = "swDatumTag"
-                                            Dim tempDatumTag As DatumTag = swAnnotation.GetSpecificAnnotation
-                                            For k As Integer = 0 To tempDatumTag.GetTextCount - 1
-                                                itemText += tempDatumTag.GetTextAtIndex(k)
-                                            Next
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-                                    Case swAnnotationType_e.swGTol              ' 幾何交差
-                                        Try
-                                            itemType = "swGTol"
-                                            Dim tempGTol As Gtol = swAnnotation.GetSpecificAnnotation
-                                            ' itemText = tempGTol.GetText(swDimensionTextParts_e.swDimensionTextAll)
-                                            For k As Integer = 0 To tempGTol.GetTextCount - 1
-                                                If k = 0 Then
-
-                                                    Try
-                                                        itemText += tempGTol.GetFrameSymbols2(1)(0)
-                                                    Catch ex As Exception
-                                                        itemText += tempGTol.GetTextAtIndex(k)
-                                                    End Try
-                                                Else
-                                                    itemText += tempGTol.GetTextAtIndex(k)
-                                                End If
-                                            Next
-
-                                            itemText = clsDCCommon.ChangeSolidGtol(itemText)
-
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-
-                                    Case swAnnotationType_e.swWeldSymbol ' 溶接記号
-                                        Try
-                                            itemType = "swWeldSymbol"
-                                            Dim tempWeldSymbol As WeldSymbol = swAnnotation.GetSpecificAnnotation
-                                            ' itemText = tempGTol.GetText(swDimensionTextParts_e.swDimensionTextAll)
-                                            For k As Integer = 0 To tempWeldSymbol.GetTextCount - 1
-                                                itemText += tempWeldSymbol.GetTextAtIndex(k)
-                                            Next
-
-                                            itemText = clsDCCommon.ChangeSolidGtol(itemText)
-
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-
-                                    Case Else
-                                        Continue For
-                                End Select
-
-                                Try
-                                    ' 空文字列しか無いものは飛ばす
-                                    If itemText = "" Then
                                         Continue For
                                     End If
 
-                                    ' 改行文字削除
-                                    itemPrefix = clsDCCommon.GetReplaceText(itemPrefix)
-                                    itemText = clsDCCommon.GetReplaceText(itemText)
-                                    itemSuffix = clsDCCommon.GetReplaceText(itemSuffix)
-                                    itemSymbol = clsDCCommon.GetReplaceText(itemSymbol)
+                                Case swAnnotationType_e.swDatumTag          ' データム記号
+                                    Try
+                                        itemType = "swDatumTag"
+                                        Dim tempDatumTag As DatumTag = swAnnotation.GetSpecificAnnotation
+                                        For k As Integer = 0 To tempDatumTag.GetTextCount - 1
+                                            itemText += tempDatumTag.GetTextAtIndex(k)
+                                        Next
+                                    Catch ex As Exception
+                                        MsgBox(ex.Message)
+                                    End Try
+                                Case swAnnotationType_e.swGTol              ' 幾何交差
+                                    Try
+                                        itemType = "swGTol"
+                                        Dim tempGTol As Gtol = swAnnotation.GetSpecificAnnotation
+                                        ' itemText = tempGTol.GetText(swDimensionTextParts_e.swDimensionTextAll)
+                                        For k As Integer = 0 To tempGTol.GetTextCount - 1
+                                            If k = 0 Then
 
-                                    ' 全角文字をすべて半角にすべて変換
-                                    itemPrefix = StrConv(itemPrefix, VbStrConv.Narrow)
-                                    itemText = StrConv(itemText, VbStrConv.Narrow)
-                                    itemSuffix = StrConv(itemSuffix, VbStrConv.Narrow)
-                                    itemSymbol = StrConv(itemSymbol, VbStrConv.Narrow)
+                                                Try
+                                                    itemText += tempGTol.GetFrameSymbols2(1)(0)
+                                                Catch ex As Exception
+                                                    itemText += tempGTol.GetTextAtIndex(k)
+                                                End Try
+                                            Else
+                                                itemText += tempGTol.GetTextAtIndex(k)
+                                            End If
+                                        Next
 
-                                    ' SolidWorks側のCSV出力用
-                                    If Not swAnnotation Is Nothing Then
-                                        tempObj = Nothing
-                                        tempObj = swAnnotation.GetPosition()
-                                        ' SolidWorks側
-                                        Dim nihongo As String = clsDCCommon.GetSWNihongoType(itemType)
-                                        ansStr = ""
-                                        posStr = ""
-                                        tempObj = Nothing
-                                        tempObj = swAnnotation.GetPosition()
+                                        itemText = clsDCCommon.ChangeSolidGtol(itemText)
 
-                                        If i = 0 Then
-                                            modelName = swOldModel.GetPathName
-                                        Else
-                                            modelName = swNewModel.GetPathName
-                                        End If
-                                        modelName = System.IO.Path.GetFileNameWithoutExtension(modelName)
-                                        'modelName = modelName.Replace(" - Model", "")
+                                    Catch ex As Exception
+                                        MsgBox(ex.Message)
+                                    End Try
 
-                                        If Not tempObj Is Nothing Then
-                                            posStr = (Math.Round(Double.Parse(tempObj(0) * 1000.0), 3).ToString _
+                                Case swAnnotationType_e.swWeldSymbol ' 溶接記号
+                                    Try
+                                        itemType = "swWeldSymbol"
+                                        Dim tempWeldSymbol As WeldSymbol = swAnnotation.GetSpecificAnnotation
+                                        ' itemText = tempGTol.GetText(swDimensionTextParts_e.swDimensionTextAll)
+                                        For k As Integer = 0 To tempWeldSymbol.GetTextCount - 1
+                                            itemText += tempWeldSymbol.GetTextAtIndex(k)
+                                        Next
+
+                                        itemText = clsDCCommon.ChangeSolidGtol(itemText)
+
+                                    Catch ex As Exception
+                                        MsgBox(ex.Message)
+                                    End Try
+
+                                Case Else
+                                    Continue For
+                            End Select
+
+                            Try
+                                ' 空文字列しか無いものは飛ばす
+                                If itemText = "" Then
+                                    Continue For
+                                End If
+
+                                ' 改行文字削除
+                                itemPrefix = clsDCCommon.GetReplaceText(itemPrefix)
+                                itemText = clsDCCommon.GetReplaceText(itemText)
+                                itemSuffix = clsDCCommon.GetReplaceText(itemSuffix)
+                                itemSymbol = clsDCCommon.GetReplaceText(itemSymbol)
+
+                                ' 全角文字をすべて半角にすべて変換
+                                itemPrefix = StrConv(itemPrefix, VbStrConv.Narrow)
+                                itemText = StrConv(itemText, VbStrConv.Narrow)
+                                itemSuffix = StrConv(itemSuffix, VbStrConv.Narrow)
+                                itemSymbol = StrConv(itemSymbol, VbStrConv.Narrow)
+
+                                ' SolidWorks側のCSV出力用
+                                If Not swAnnotation Is Nothing Then
+                                    tempObj = Nothing
+                                    tempObj = swAnnotation.GetPosition()
+                                    ' SolidWorks側
+                                    Dim nihongo As String = clsDCCommon.GetSWNihongoType(itemType)
+                                    ansStr = ""
+                                    posStr = ""
+                                    tempObj = Nothing
+                                    tempObj = swAnnotation.GetPosition()
+
+                                    If i = 0 Then
+                                        modelName = swOldModel.GetPathName
+                                    Else
+                                        modelName = swNewModel.GetPathName
+                                    End If
+                                    modelName = System.IO.Path.GetFileNameWithoutExtension(modelName)
+                                    'modelName = modelName.Replace(" - Model", "")
+
+                                    If Not tempObj Is Nothing Then
+                                        posStr = (Math.Round(Double.Parse(tempObj(0) * 1000.0), 3).ToString _
                                                        + clsDesignTool.m_SepValue + " " +
                                                         Math.Round(Double.Parse(tempObj(1) * 1000.0), 3).ToString) + clsDesignTool.m_SepValue + " "
-                                        Else
-                                            posStr = "0.0" + clsDesignTool.m_SepValue + " " + "0.0" + clsDesignTool.m_SepValue + " "
-                                        End If
+                                    Else
+                                        posStr = "0.0" + clsDesignTool.m_SepValue + " " + "0.0" + clsDesignTool.m_SepValue + " "
+                                    End If
 
-                                        ansStr += modelName + clsDesignTool.m_SepValue + " " +
+                                    ansStr += modelName + clsDesignTool.m_SepValue + " " +
                                                 nihongo + clsDesignTool.m_SepValue + " " +
                                                 posStr _
                                                 + clsDCCommon.ChangePrefix("SW", itemPrefix) + clsDesignTool.m_SepValue + " " +
@@ -426,36 +426,36 @@ Public Class clsSolidControl
                                                 itemSuffix + clsDesignTool.m_SepValue + " " +
                                                 itemSymbol + clsDesignTool.m_SepValue + " "
 
-                                        'If Not tempObj Is Nothing Then
-                                        '    ansStr += (Math.Round(Double.Parse(tempObj(0) * 1000.0), 3).ToString _
-                                        '               + clsDesignTool.m_SepValue +
-                                        '                Math.Round(Double.Parse(tempObj(1) * 1000.0), 3).ToString)
-                                        'Else
-                                        '    ansStr += "0.0" + clsDesignTool.m_SepValue + "0.0"
-                                        'End If
+                                    'If Not tempObj Is Nothing Then
+                                    '    ansStr += (Math.Round(Double.Parse(tempObj(0) * 1000.0), 3).ToString _
+                                    '               + clsDesignTool.m_SepValue +
+                                    '                Math.Round(Double.Parse(tempObj(1) * 1000.0), 3).ToString)
+                                    'Else
+                                    '    ansStr += "0.0" + clsDesignTool.m_SepValue + "0.0"
+                                    'End If
 
-                                        solidCsvData.Add(ansStr)
-                                        ' 新しい方の図面のアノテート情報を保持
-                                        If i = 1 Then
-                                            annotations.Add(swAnnotation)
-                                        End If
-
-                                        If i = 0 Then
-                                            annotations2.Add(swAnnotation)
-                                        End If
-
+                                    solidCsvData.Add(ansStr)
+                                    ' 新しい方の図面のアノテート情報を保持
+                                    If i = 1 Then
+                                        annotations.Add(swAnnotation)
                                     End If
-                                Catch ex As Exception
-                                    MsgBox(ex.Message)
-                                End Try
-                            Next
-                        End If
 
-                        ' ハッチング情報取得
-                        Dim hatchData As List(Of String) = GetHatching(swView, hatchList)
-                        If hatchData.Count <> 0 Then
-                            For k As Integer = 0 To hatchData.Count - 1
-                                ansStr = modelName + clsDesignTool.m_SepValue + " " _
+                                    If i = 0 Then
+                                        annotations2.Add(swAnnotation)
+                                    End If
+
+                                End If
+                            Catch ex As Exception
+                                MsgBox(ex.Message)
+                            End Try
+                        Next
+                    End If
+
+                    ' ハッチング情報取得
+                    Dim hatchData As List(Of String) = GetHatching(swView, hatchList)
+                    If hatchData.Count <> 0 Then
+                        For k As Integer = 0 To hatchData.Count - 1
+                            ansStr = modelName + clsDesignTool.m_SepValue + " " _
                                 + clsDCCommon.GetSWNihongoType("swHatching") + " " _
                                 + "" + clsDesignTool.m_SepValue _
                                 + "" + clsDesignTool.m_SepValue _
@@ -464,33 +464,33 @@ Public Class clsSolidControl
                                 + "" + clsDesignTool.m_SepValue _
                                 + "" + clsDesignTool.m_SepValue
 
-                                hatchingCsvData.Add(ansStr)
+                            hatchingCsvData.Add(ansStr)
 
-                            Next
-                        End If
+                        Next
+                    End If
 
-                        Dim table As TableAnnotation = swView.GetFirstTableAnnotation()
-                        'Dim instance As IAnnotation
+                    Dim table As TableAnnotation = swView.GetFirstTableAnnotation()
+                    'Dim instance As IAnnotation
 
-                        If table IsNot Nothing Then
-                            Do While (1)
-                                If table Is Nothing Then Exit Do
-                                tableList.Add(table)
-                                table = table.GetNext
-                            Loop
-                        End If
+                    If table IsNot Nothing Then
+                        Do While (1)
+                            If table Is Nothing Then Exit Do
+                            tableList.Add(table)
+                            table = table.GetNext
+                        Loop
+                    End If
 
-                        'Dim objFeature As Feature = swView.FirstFeature()
-                        'If objFeature IsNot Nothing Then
-                        '    Do While (1)
-                        '        If objFeature Is Nothing Then Exit Do
+                    'Dim objFeature As Feature = swView.FirstFeature()
+                    'If objFeature IsNot Nothing Then
+                    '    Do While (1)
+                    '        If objFeature Is Nothing Then Exit Do
 
-                        '        objFeature = objFeature.GetNextFeature
-                        '    Loop
-                        'End If
+                    '        objFeature = objFeature.GetNextFeature
+                    '    Loop
+                    'End If
 
-                        swView = swView.GetNextView
-                    End While
+                    swView = swView.GetNextView
+                End While
 
                 'Next
                 swDraw.ActivateSheet(sheetNames(0))
@@ -547,7 +547,7 @@ Public Class clsSolidControl
                 ' データ格納
                 For j As Integer = 0 To solidCsvData.Count - 1
 
-                        Dim tempStr As String = solidCsvData(j)
+                    Dim tempStr As String = solidCsvData(j)
                     If i = 0 Then
                         oldCsvData.Add(tempStr)
                     Else
@@ -697,16 +697,16 @@ Public Class clsSolidControl
 
                         ' 一致フラグON
                         safeFlag2 = True
-                            'Exit For
-                            'End If
+                        'Exit For
+                        'End If
 
-                            ' 使用済no格納
-                            'usedNo.Add(j)
-                            '    ' 一致フラグON
-                            '    safeFlag = True
-                            '    Exit For
+                        ' 使用済no格納
+                        'usedNo.Add(j)
+                        '    ' 一致フラグON
+                        '    safeFlag = True
+                        '    Exit For
 
-                        End If
+                    End If
                 Next
 
                 If safeFlag2 = True Then
@@ -1271,10 +1271,11 @@ Public Class clsSolidControl
                                 End If
                             End If
                         Else
-                            itemSuffix = dimen.Tolerance.GetShaftFitValue
-                            itemSuffix += dimen.Tolerance.GetHoleFitValue
-                            itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
+                            'itemSuffix = dimen.Tolerance.GetShaftFitValue
+                            'itemSuffix += dimen.Tolerance.GetHoleFitValue
+                            'itemSuffix += clsDCCommon.ChangePrefix("SW", tempDimension.GetText(swDimensionTextParts_e.swDimensionTextSuffix))
 
+                            itemSuffix = ""
                             If itemType = "swAngularDimension" Then
                                 itemSuffix += "°"
                             End If

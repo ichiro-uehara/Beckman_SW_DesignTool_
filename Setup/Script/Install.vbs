@@ -1,17 +1,6 @@
 Option Explicit
 On Error Resume Next
 
-'----------------------------------------------------------------------------
-' 対象プログラムのパス
-'----------------------------------------------------------------------------
-' CustomActionData にはプログラムのパスが渡されていることを期待する
-'----------------------------------------------------------------------------
-'
-Dim ProgramPath
-ProgramPath = """" & Property("CustomActionData") & dllName & """"
-
-' msgbox ProgramPath
-
 Sub RegistAssembly(wshShell)
 	Dim commandLine
 
