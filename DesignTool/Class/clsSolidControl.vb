@@ -153,6 +153,10 @@ Public Class clsSolidControl
 
             Dim thred As Integer = -1
 
+            'sketchhatch number
+            Dim scount As Integer = 0
+            Dim scount2 As Integer = 0
+
             Dim SheetChange As Object
             SheetChange = New clsSheetChange()
             Dim ary As ArrayList = SheetChange.LoadIniData("[SheetColor1]")
@@ -241,6 +245,7 @@ Public Class clsSolidControl
 
                 Dim solidCsvData As New List(Of String)
                 Dim hatchingCsvData As New List(Of String)
+                Dim hatchingCsvData2 As New List(Of String)
                 Dim hatchList As New List(Of SketchHatch)
                 Dim hatchList2 As New List(Of FaceHatch)
                 Dim tableList As New List(Of TableAnnotation)
@@ -455,8 +460,10 @@ Public Class clsSolidControl
                         Next
                     End If
 
+                    Dim ansStrList2 As List(Of String) = New List(Of String)
+
                     ' ハッチング情報取得
-                    Dim hatchData As List(Of String) = GetHatching(swView, hatchList, hatchList2)
+                    Dim hatchData As List(Of String) = GetHatching(swView, hatchList, hatchList2, ansStrList2)
                     If hatchData.Count <> 0 Then
                         For k As Integer = 0 To hatchData.Count - 1
                             ansStr = modelName + clsDesignTool.m_SepValue + " " _
@@ -469,7 +476,20 @@ Public Class clsSolidControl
                                 + "" + clsDesignTool.m_SepValue
 
                             hatchingCsvData.Add(ansStr)
+                        Next
+                    End If
+                    If ansStrList2.Count <> 0 Then
+                        For k As Integer = 0 To ansStrList2.Count - 1
+                            ansStr = modelName + clsDesignTool.m_SepValue + " " _
+                                + clsDCCommon.GetSWNihongoType("swHatching") + " " _
+                                + "" + clsDesignTool.m_SepValue _
+                                + "" + clsDesignTool.m_SepValue _
+                                + "" + clsDesignTool.m_SepValue _
+                                + ansStrList2(k) + clsDesignTool.m_SepValue _
+                                + "" + clsDesignTool.m_SepValue _
+                                + "" + clsDesignTool.m_SepValue
 
+                            hatchingCsvData2.Add(ansStr)
                         Next
                     End If
 
@@ -501,39 +521,51 @@ Public Class clsSolidControl
                 swDraw.EditRebuild()
 
                 If hatchList.Count <> 0 Then
-                    For Each hatch In hatchList
-                        For Each lay In layerList
-                            Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
-                            If currentLayer.Name = hatch.Layer.ToString() Then
-                                If i = 0 Then
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                    oldLayerName.Add("COMP" + currentLayer.Name)
-                                Else
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
-                                    newLayerName.Add("COMP" + currentLayer.Name)
-                                End If
+                    Do
+                        For Each hatch In hatchList
+                            For Each lay In layerList
+                                Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
+                                If currentLayer.Name = hatch.Layer.ToString() Then
+                                    If i = 0 Then
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
+                                        oldLayerName.Add("COMP" + currentLayer.Name)
+                                        Exit Do
+                                    Else
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
+                                        newLayerName.Add("COMP" + currentLayer.Name)
+                                        Exit Do
+                                    End If
 
-                                Exit For
-                            End If
+                                    Exit For
+                                End If
+                            Next
                         Next
-                    Next
+
+                        Exit Do
+                    Loop
                 ElseIf hatchList2.Count <> 0 Then
-                    For Each hatch In hatchList2
-                        For Each lay In layerList
-                            Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
-                            If currentLayer.Name = hatch.Layer.ToString() Then
-                                If i = 0 Then
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                    oldLayerName.Add("COMP" + currentLayer.Name)
-                                Else
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
-                                    newLayerName.Add("COMP" + currentLayer.Name)
-                                End If
+                    Do
+                        For Each hatch In hatchList2
+                            For Each lay In layerList
+                                Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
+                                If currentLayer.Name = hatch.Layer.ToString() Then
+                                    If i = 0 Then
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
+                                        oldLayerName.Add("COMP" + currentLayer.Name)
+                                        Exit Do
+                                    Else
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
+                                        newLayerName.Add("COMP" + currentLayer.Name)
+                                        Exit Do
+                                    End If
 
-                                Exit For
-                            End If
+                                    Exit For
+                                End If
+                            Next
                         Next
-                    Next
+
+                        Exit Do
+                    Loop
                 End If
 
                 If tableList.Count <> 0 Then
@@ -557,6 +589,15 @@ Public Class clsSolidControl
                     For j As Integer = 0 To hatchingCsvData.Count - 1
                         solidCsvData.Add(hatchingCsvData(j))
                     Next
+                    For j As Integer = 0 To hatchingCsvData2.Count - 1
+                        solidCsvData.Add(hatchingCsvData2(j))
+                    Next
+
+                    If i = 0 Then
+                        scount = hatchingCsvData.Count
+                    Else
+                        scount2 = hatchingCsvData.Count
+                    End If
                 End If
 
                 If (newLayerName.Count > 0 Or oldLayerName.Count > 0) Then
@@ -769,7 +810,7 @@ Public Class clsSolidControl
                             'newLayerName2.Add(newLayerName(i - annotations.Count))
                             newLayerName2.Add(newLayerName(0))
                         ElseIf (newHatchListf.Count > 0) Then
-                            newHatchListf2.Add(newHatchListf(i - annotations.Count))
+                            newHatchListf2.Add(newHatchListf(i - annotations.Count - scount2))
                             'newLayerName2.Add(newLayerName(i - annotations.Count))
                             newLayerName2.Add(newLayerName(0))
                         End If
@@ -912,7 +953,7 @@ Public Class clsSolidControl
                             'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
                             oldLayerName2.Add(oldLayerName(0))
                         ElseIf (oldHatchListf.Count > 0) Then
-                            oldHatchListf2.Add(oldHatchListf(i - annotations2.Count))
+                            oldHatchListf2.Add(oldHatchListf(i - annotations2.Count - scount))
                             'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
                             oldLayerName2.Add(oldLayerName(0))
                         End If
@@ -1443,9 +1484,7 @@ Public Class clsSolidControl
     End Function
 
     ' ハッチング取得
-    Public Function GetHatching(swView As View, ByRef hatchList As List(Of SketchHatch), ByRef hatchList2 As List(Of FaceHatch)) As List(Of String)
-
-
+    Public Function GetHatching(swView As View, ByRef hatchList As List(Of SketchHatch), ByRef hatchList2 As List(Of FaceHatch), ByRef ansStrList2 As List(Of String)) As List(Of String)
 
         Dim swSketch As Sketch
         Dim vFaceHatch As Object
@@ -1470,7 +1509,7 @@ Public Class clsSolidControl
                 ansStr += " " + swFaceHatch.SolidFill.ToString
 
                 hatchList2.Add(swFaceHatch)
-                ansStrList.Add(ansStr)
+                ansStrList2.Add(ansStr)
 
                 ansStr = ""
                 'Exit For
