@@ -125,6 +125,9 @@ Public Class clsSolidControl
             Dim oldHatchList As New List(Of SketchHatch)
             Dim newHatchList As New List(Of SketchHatch)
 
+            Dim oldHatchListf As New List(Of FaceHatch)
+            Dim newHatchListf As New List(Of FaceHatch)
+
             Dim swAnnotations As Object = Nothing                       ' アノテートアイテム
             Dim swDisplayDimensions() As DisplayDimension = Nothing     ' 寸法
             Dim swSFSymbols() As SFSymbol = Nothing                     ' シンボル
@@ -239,6 +242,7 @@ Public Class clsSolidControl
                 Dim solidCsvData As New List(Of String)
                 Dim hatchingCsvData As New List(Of String)
                 Dim hatchList As New List(Of SketchHatch)
+                Dim hatchList2 As New List(Of FaceHatch)
                 Dim tableList As New List(Of TableAnnotation)
 
                 sheetNames = Nothing
@@ -452,7 +456,7 @@ Public Class clsSolidControl
                     End If
 
                     ' ハッチング情報取得
-                    Dim hatchData As List(Of String) = GetHatching(swView, hatchList)
+                    Dim hatchData As List(Of String) = GetHatching(swView, hatchList, hatchList2)
                     If hatchData.Count <> 0 Then
                         For k As Integer = 0 To hatchData.Count - 1
                             ansStr = modelName + clsDesignTool.m_SepValue + " " _
@@ -513,6 +517,23 @@ Public Class clsSolidControl
                             End If
                         Next
                     Next
+                ElseIf hatchList2.Count <> 0 Then
+                    For Each hatch In hatchList2
+                        For Each lay In layerList
+                            Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
+                            If currentLayer.Name = hatch.Layer.ToString() Then
+                                If i = 0 Then
+                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
+                                    oldLayerName.Add("COMP" + currentLayer.Name)
+                                Else
+                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
+                                    newLayerName.Add("COMP" + currentLayer.Name)
+                                End If
+
+                                Exit For
+                            End If
+                        Next
+                    Next
                 End If
 
                 If tableList.Count <> 0 Then
@@ -536,13 +557,27 @@ Public Class clsSolidControl
                     solidCsvData.Add(hatchingCsvData(j))
                 Next
 
+                If (hatchList.Count > 0) Then
+                    If i = 0 Then
+                        oldHatchList = hatchList
+                    Else
+                        newHatchList = hatchList
+                    End If
+                ElseIf (hatchList2.Count > 0) Then
+                    If i = 0 Then
+                        oldHatchListf = hatchList2
+                    Else
+                        newHatchListf = hatchList2
+                    End If
+                End If
+
                 If i = 0 Then
-                    oldHatchList = hatchList
                     oldLayerT = tableList
                 Else
-                    newHatchList = hatchList
                     newLayerT = tableList
                 End If
+
+
 
                 ' データ格納
                 For j As Integer = 0 To solidCsvData.Count - 1
@@ -563,6 +598,9 @@ Public Class clsSolidControl
 
             Dim oldHatchList2 As New List(Of SketchHatch)
             Dim newHatchList2 As New List(Of SketchHatch)
+
+            Dim oldHatchListf2 As New List(Of FaceHatch)
+            Dim newHatchListf2 As New List(Of FaceHatch)
 
             Dim oldLayerName2 As New List(Of String)
             Dim newLayerName2 As New List(Of String)
@@ -721,11 +759,19 @@ Public Class clsSolidControl
                         Dim tempAnno As Annotation = annotations(i)
                         newAnnotations.Add(tempAnno)
                     Else
-                        newHatchList2.Add(newHatchList(i - annotations.Count))
-                        newLayerName2.Add(newLayerName(i - annotations.Count))
+                        If (newHatchList.Count > 0) Then
+                            newHatchList2.Add(newHatchList(i - annotations.Count))
+                            'newLayerName2.Add(newLayerName(i - annotations.Count))
+                            newLayerName2.Add(newLayerName(0))
+                        ElseIf (newHatchListf.Count > 0) Then
+                            newHatchListf2.Add(newHatchListf(i - annotations.Count))
+                            'newLayerName2.Add(newLayerName(i - annotations.Count))
+                            newLayerName2.Add(newLayerName(0))
+                        End If
+
                     End If
 
-                    viewNewData.Add(newCsvData(i))
+                        viewNewData.Add(newCsvData(i))
                     noCompCSVData.Add(newCsvData(i))
                 End If
 
@@ -854,8 +900,17 @@ Public Class clsSolidControl
                         'Dim tempFormat As TextFormat = Nothing
                         newAnnotations2.Add(tempAnno)
                     Else
-                        oldHatchList2.Add(oldHatchList(i - annotations2.Count))
-                        oldLayerName2.Add(oldLayerName(i - annotations2.Count))
+                        'oldHatchList2.Add(oldHatchList(i - annotations2.Count))
+                        'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
+                        If (oldHatchList.Count > 0) Then
+                            oldHatchList2.Add(oldHatchList(i - annotations2.Count))
+                            'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
+                            oldLayerName2.Add(oldLayerName(0))
+                        ElseIf (oldHatchListf.Count > 0) Then
+                            oldHatchListf2.Add(oldHatchListf(i - annotations2.Count))
+                            'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
+                            oldLayerName2.Add(oldLayerName(0))
+                        End If
                     End If
 
                     viewOldData.Add(oldCsvData(i))
@@ -1006,6 +1061,10 @@ Public Class clsSolidControl
                 For j As Integer = 0 To oldHatchList2.Count - 1
                     oldHatchList2(j).Layer = oldLayerName2(j)
                 Next
+            ElseIf oldHatchListf2.Count > 0 Then
+                For j As Integer = 0 To oldHatchListf2.Count - 1
+                    oldHatchListf2(j).Layer = oldLayerName2(j)
+                Next
             End If
 
             If oldTableList.Count > 0 Then
@@ -1045,6 +1104,10 @@ Public Class clsSolidControl
             If newHatchList2.Count > 0 Then
                 For j As Integer = 0 To newHatchList2.Count - 1
                     newHatchList2(j).Layer = newLayerName2(j)
+                Next
+            ElseIf newHatchListf2.Count > 0 Then
+                For j As Integer = 0 To newHatchListf2.Count - 1
+                    newHatchListf2(j).Layer = oldLayerName2(j)
                 Next
             End If
 
@@ -1375,7 +1438,7 @@ Public Class clsSolidControl
     End Function
 
     ' ハッチング取得
-    Public Function GetHatching(swView As View, ByRef hatchList As List(Of SketchHatch)) As List(Of String)
+    Public Function GetHatching(swView As View, ByRef hatchList As List(Of SketchHatch), ByRef hatchList2 As List(Of FaceHatch)) As List(Of String)
 
 
 
@@ -1401,6 +1464,7 @@ Public Class clsSolidControl
                 ansStr += " " + swFaceHatch.Scale2.ToString
                 ansStr += " " + swFaceHatch.SolidFill.ToString
 
+                hatchList2.Add(swFaceHatch)
                 ansStrList.Add(ansStr)
 
                 ansStr = ""
