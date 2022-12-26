@@ -1163,6 +1163,9 @@ Public Class clsSolidControl
                 Next
             End If
 
+            swOldModel.ForceRebuild3(False)
+            swNewModel.ForceRebuild3(False)
+
             swOldModel.Save()
             swNewModel.Save()
             swOldModel.ViewZoomtofit2()
@@ -1493,6 +1496,7 @@ Public Class clsSolidControl
         Dim swSketchHatch As SketchHatch
         Dim ansStr As String = ""
         Dim ansStrList As List(Of String) = New List(Of String)
+        Dim swFace As SolidWorks.Interop.sldworks.Face2
 
         swSketch = swView.GetSketch
         vFaceHatch = swView.GetFaceHatches
@@ -1500,8 +1504,10 @@ Public Class clsSolidControl
         If Not vFaceHatch Is Nothing Then
 
             For Each swFaceHatch In vFaceHatch
-                ansStr += (swFaceHatch.Angle * 57.3).ToString
-                'ansStr += " " + swFaceHatch.Color.ToString
+                swFace = swFaceHatch.Face
+                ansStr += swFace.GetArea.ToString
+                'ansStr += (swFaceHatch.Angle * 57.3).ToString
+                ansStr += " " + swFaceHatch.Color.ToString
                 ansStr += " " + swFaceHatch.Definition.ToString
                 ansStr += " " + swFaceHatch.Layer.ToString
                 ansStr += " " + swFaceHatch.Pattern.ToString
@@ -1510,6 +1516,9 @@ Public Class clsSolidControl
 
                 hatchList2.Add(swFaceHatch)
                 ansStrList2.Add(ansStr)
+                swFaceHatch.UseMaterialHatch = False
+                'swFaceHatch.UseMaterialHatch = False
+                'swFaceHatch.Color = CInt(RGB(255, 0, 0))
 
                 ansStr = ""
                 'Exit For
