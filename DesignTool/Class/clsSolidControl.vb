@@ -140,6 +140,9 @@ Public Class clsSolidControl
             Dim oldLayerName As List(Of String) = New List(Of String)
             Dim newLayerName As List(Of String) = New List(Of String)
 
+            Dim oldfaceLayerName As String = ""
+            Dim newfaceLayerName As String = ""
+
             Dim oldLayerTName As List(Of String) = New List(Of String)
             Dim newLayerTName As List(Of String) = New List(Of String)
             Dim oldLayerT As New List(Of TableAnnotation)
@@ -156,6 +159,11 @@ Public Class clsSolidControl
             'sketchhatch number
             Dim scount As Integer = 0
             Dim scount2 As Integer = 0
+
+            Dim facehatchflg As Integer = 0
+
+            Dim OldfacehatchingData As New List(Of String)
+            Dim NewfacehatchingData As New List(Of String)
 
             Dim SheetChange As Object
             SheetChange = New clsSheetChange()
@@ -490,6 +498,7 @@ Public Class clsSolidControl
                                 + "" + clsDesignTool.m_SepValue
 
                             hatchingCsvData2.Add(ansStr)
+                            hatchList2(k).UseMaterialHatch = False
                         Next
                     End If
 
@@ -529,11 +538,11 @@ Public Class clsSolidControl
                                     If i = 0 Then
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
                                         oldLayerName.Add("COMP" + currentLayer.Name)
-                                        Exit Do
+                                        'Exit Do
                                     Else
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
                                         newLayerName.Add("COMP" + currentLayer.Name)
-                                        Exit Do
+                                        'Exit Do
                                     End If
 
                                     Exit For
@@ -551,11 +560,13 @@ Public Class clsSolidControl
                                 If currentLayer.Name = hatch.Layer.ToString() Then
                                     If i = 0 Then
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                        oldLayerName.Add("COMP" + currentLayer.Name)
+                                        ''oldLayerName.Add("COMP" + currentLayer.Name)
+                                        oldfaceLayerName = "COMP" + currentLayer.Name
                                         Exit Do
                                     Else
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
-                                        newLayerName.Add("COMP" + currentLayer.Name)
+                                        ''newLayerName.Add("COMP" + currentLayer.Name)
+                                        newfaceLayerName = "COMP" + currentLayer.Name
                                         Exit Do
                                     End If
 
@@ -585,7 +596,7 @@ Public Class clsSolidControl
                     Next
                 End If
 
-                If (newLayerName.Count > 0 Or oldLayerName.Count > 0) Then
+                If (newLayerName.Count > 0 Or oldLayerName.Count > 0 Or newfaceLayerName IsNot "" Or oldfaceLayerName IsNot "") Then
                     For j As Integer = 0 To hatchingCsvData.Count - 1
                         solidCsvData.Add(hatchingCsvData(j))
                     Next
@@ -598,9 +609,7 @@ Public Class clsSolidControl
                     Else
                         scount2 = hatchingCsvData.Count
                     End If
-                End If
 
-                If (newLayerName.Count > 0 Or oldLayerName.Count > 0) Then
                     If (hatchList.Count > 0) Then
                         If i = 0 Then
                             oldHatchList = hatchList
@@ -808,11 +817,12 @@ Public Class clsSolidControl
                         If (newHatchList.Count > 0) Then
                             newHatchList2.Add(newHatchList(i - annotations.Count))
                             'newLayerName2.Add(newLayerName(i - annotations.Count))
-                            newLayerName2.Add(newLayerName(0))
+                            newLayerName2.Add(newLayerName(i - annotations.Count))
                         ElseIf (newHatchListf.Count > 0) Then
                             newHatchListf2.Add(newHatchListf(i - annotations.Count - scount2))
                             'newLayerName2.Add(newLayerName(i - annotations.Count))
-                            newLayerName2.Add(newLayerName(0))
+                            'newLayerName2.Add(newLayerName(0))
+                            'NewfacehatchingData.Add(newCsvData(i))
                         End If
 
                     End If
@@ -951,11 +961,12 @@ Public Class clsSolidControl
                         If (oldHatchList.Count > 0) Then
                             oldHatchList2.Add(oldHatchList(i - annotations2.Count))
                             'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
-                            oldLayerName2.Add(oldLayerName(0))
+                            oldLayerName2.Add(oldLayerName(i - annotations2.Count))
                         ElseIf (oldHatchListf.Count > 0) Then
                             oldHatchListf2.Add(oldHatchListf(i - annotations2.Count - scount))
                             'oldLayerName2.Add(oldLayerName(i - annotations2.Count))
-                            oldLayerName2.Add(oldLayerName(0))
+                            'oldLayerName2.Add(oldLayerName(0))
+                            'OldfacehatchingData.Add(oldCsvData(i))
                         End If
                     End If
 
@@ -1108,8 +1119,10 @@ Public Class clsSolidControl
                     oldHatchList2(j).Layer = oldLayerName2(j)
                 Next
             ElseIf oldHatchListf2.Count > 0 Then
+                facehatchflg = 1
                 For j As Integer = 0 To oldHatchListf2.Count - 1
-                    oldHatchListf2(j).Layer = oldLayerName2(j)
+                    'oldHatchListf2(j).Layer = oldLayerName2(j)
+                    oldHatchListf2(j).Layer = oldfaceLayerName
                 Next
             End If
 
@@ -1152,8 +1165,10 @@ Public Class clsSolidControl
                     newHatchList2(j).Layer = newLayerName2(j)
                 Next
             ElseIf newHatchListf2.Count > 0 Then
+                facehatchflg = 1
                 For j As Integer = 0 To newHatchListf2.Count - 1
-                    newHatchListf2(j).Layer = oldLayerName2(j)
+                    'newHatchListf2(j).Layer = oldLayerName2(j)
+                    newHatchListf2(j).Layer = newfaceLayerName
                 Next
             End If
 
@@ -1168,8 +1183,155 @@ Public Class clsSolidControl
 
             swOldModel.Save()
             swNewModel.Save()
-            swOldModel.ViewZoomtofit2()
-            swNewModel.ViewZoomtofit2()
+
+            If facehatchflg = 1 Then
+                Dim oldName As String = swOldModel.GetPathName
+                Dim newName As String = swNewModel.GetPathName
+
+                swApp.CloseAllDocuments(True)
+                swApp.OpenDoc(oldName, swDocumentTypes_e.swDocDRAWING)
+                swApp.OpenDoc(newName, swDocumentTypes_e.swDocDRAWING)
+
+                swApp.ActivateDoc(oldName)
+                swApp.ActivateDoc(newName)
+
+                swModels = swApp.GetDocuments()
+
+                For ii As Integer = 0 To swApp.GetDocumentCount - 1
+                    Dim tmpModel As ModelDoc2 = swModels(ii)
+                    If tmpModel.GetType = 3 Then
+                        'Dim title As String = tmpModel.GetTitle()
+                        Dim modelName2 As String = System.IO.Path.GetFileNameWithoutExtension(tmpModel.GetPathName)
+                        If oldSolidName = modelName2 Then
+                            swOldModel = tmpModel
+                        End If
+                        If newSolidName = modelName2 Then
+                            swNewModel = tmpModel
+                        End If
+                    End If
+                Next
+
+                'Dim hatchList As New List(Of SketchHatch)
+                ''Dim hatchList2 As New List(Of FaceHatch)
+                'Dim hatchingCsvData As New List(Of String)
+                'Dim hatchingCsvData2 As New List(Of String)
+                'Dim modelName As String
+                'Dim ansStr As String
+                'Dim hatchList3 As New List(Of FaceHatch)
+                'Dim hatchList4 As New List(Of FaceHatch)
+
+                'For i As Integer = 0 To 1
+                '    If i = 0 Then
+                '        swDraw = swOldModel
+                '        modelName = swOldModel.GetPathName
+                '    Else
+                '        swDraw = swNewModel
+                '        modelName = swNewModel.GetPathName
+                '    End If
+                '    modelName = System.IO.Path.GetFileNameWithoutExtension(modelName)
+
+                '    ' ビューの内容を順番に取得 
+                '    swView = swDraw.GetFirstView
+
+                '    Dim hatchList2 As New List(Of FaceHatch)
+
+                '    ' ビューの数分ループ
+                '    While Not swView Is Nothing
+
+                '        Dim ansStrList2 As List(Of String) = New List(Of String)
+
+                '        ' ハッチング情報取得
+                '        Dim hatchData As List(Of String) = GetHatching(swView, hatchList, hatchList2, ansStrList2)
+                '        If ansStrList2.Count <> 0 Then
+                '            For k As Integer = 0 To ansStrList2.Count - 1
+                '                ansStr = modelName + clsDesignTool.m_SepValue + " " _
+                '                    + clsDCCommon.GetSWNihongoType("swHatching") + " " _
+                '                    + "" + clsDesignTool.m_SepValue _
+                '                    + "" + clsDesignTool.m_SepValue _
+                '                    + "" + clsDesignTool.m_SepValue _
+                '                    + ansStrList2(k) + clsDesignTool.m_SepValue _
+                '                    + "" + clsDesignTool.m_SepValue _
+                '                    + "" + clsDesignTool.m_SepValue
+
+                '                If i = 0 Then
+                '                    hatchingCsvData.Add(ansStr)
+                '                Else
+                '                    hatchingCsvData2.Add(ansStr)
+                '                End If
+
+                '                'Dim tempStr As String = ansStr
+                '                'If i = 0 Then
+                '                '    If OldfacehatchingData.IndexOf(tempStr) >= 0 Then
+                '                '        hatchList2(k).Layer = oldfaceLayerName
+                '                '    End If
+                '                'Else
+                '                '    If NewfacehatchingData.IndexOf(tempStr) >= 0 Then
+                '                '        hatchList2(k).Layer = newfaceLayerName
+                '                '    End If
+                '                'End If
+                '            Next
+
+                '            'If i = 0 Then
+                '            '    oldHatchList.Add(hatchList3)
+                '            'Else
+                '            '    newHatchList.Add(hatchList4)
+                '            'End If
+                '        End If
+
+                '        swView = swView.GetNextView
+                '    End While
+
+                '    If i = 0 Then
+                '        hatchList3 = hatchList2
+                '    Else
+                '        hatchList4 = hatchList2
+                '    End If
+                'Next
+
+                'swApp.ActivateDoc(swOldModel.GetPathName)
+
+                ''For i As Integer = 0 To oldHatchListf2.Count - 1
+                ''    For j As Integer = 0 To hatchList3.Count - 1
+                ''        If oldHatchListf2(i).Equals(hatchList3(j)) Then
+                ''            hatchList3(j).Layer = oldfaceLayerName
+                ''        End If
+                ''    Next
+                ''Next
+
+
+                ''For i As Integer = 0 To hatchingCsvData.Count - 1
+                ''    Dim tempStr As String = hatchingCsvData(i)
+                ''    'If OldfacehatchingData.IndexOf(tempStr) >= 0 Then
+                ''    '    hatchList3(i).Layer = oldfaceLayerName
+                ''    'End If
+                ''    hatchList3(i).Layer = hatchList3(i).Layer
+                ''Next
+
+                'swApp.ActivateDoc(swNewModel.GetPathName)
+
+                ''For i As Integer = 0 To hatchingCsvData2.Count - 1
+                ''    Dim tempStr As String = hatchingCsvData2(i)
+                ''    'If NewfacehatchingData.IndexOf(tempStr) >= 0 Then
+                ''    '    hatchList4(i).Layer = newfaceLayerName
+                ''    'End If
+                ''    hatchList4(i).Layer = hatchList4(i).Layer
+                ''Next
+
+                System.Windows.Forms.MessageBox.Show("断面図のハッチングが存在します。" & vbCrLf &
+                                                     "SW APIの問題で、色が変わらない可能性があるので、" & vbCrLf &
+                                                     "色が変わっていないハッチングを目視で確認してください。")
+
+                swOldModel.ForceRebuild3(False)
+                swNewModel.ForceRebuild3(False)
+
+                swOldModel.Save()
+                swNewModel.Save()
+                swOldModel.ViewZoomtofit2()
+                swNewModel.ViewZoomtofit2()
+
+                swApp.ArrangeWindows(2)
+
+            End If
 
             Return True
 
@@ -1507,7 +1669,7 @@ Public Class clsSolidControl
                 swFace = swFaceHatch.Face
                 ansStr += swFace.GetArea.ToString
                 'ansStr += (swFaceHatch.Angle * 57.3).ToString
-                ansStr += " " + swFaceHatch.Color.ToString
+                'ansStr += " " + swFaceHatch.Color.ToString
                 ansStr += " " + swFaceHatch.Definition.ToString
                 ansStr += " " + swFaceHatch.Layer.ToString
                 ansStr += " " + swFaceHatch.Pattern.ToString
@@ -1552,7 +1714,5 @@ Public Class clsSolidControl
         Return ansStrList
 
     End Function
-
-
 
 End Class
