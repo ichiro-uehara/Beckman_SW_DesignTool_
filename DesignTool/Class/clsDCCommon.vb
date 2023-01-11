@@ -416,6 +416,8 @@ Public Class clsDCCommon
                     nihongo = "溶接シンボル"
                 Case "swHatching"
                     nihongo = "ハッチング"
+                Case "swFaceHatching"
+                    nihongo = "断面図ハッチング"
             End Select
 
             Return nihongo

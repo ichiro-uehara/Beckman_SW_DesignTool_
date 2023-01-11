@@ -489,7 +489,7 @@ Public Class clsSolidControl
                     If ansStrList2.Count <> 0 Then
                         For k As Integer = 0 To ansStrList2.Count - 1
                             ansStr = modelName + clsDesignTool.m_SepValue + " " _
-                                + clsDCCommon.GetSWNihongoType("swHatching") + " " _
+                                + clsDCCommon.GetSWNihongoType("swFaceHatching") + " " _
                                 + "" + clsDesignTool.m_SepValue _
                                 + "" + clsDesignTool.m_SepValue _
                                 + "" + clsDesignTool.m_SepValue _
@@ -1198,10 +1198,6 @@ Public Class clsSolidControl
                     End If
                 Next
 
-                System.Windows.Forms.MessageBox.Show("断面図のハッチングが存在します。" & vbCrLf &
-                                                     "SW APIの問題で、色が変わらない可能性があるので、" & vbCrLf &
-                                                     "色が変わっていないハッチングを目視で確認してください。")
-
                 swOldModel.ForceRebuild3(False)
                 swNewModel.ForceRebuild3(False)
 
@@ -1211,6 +1207,10 @@ Public Class clsSolidControl
                 swNewModel.ViewZoomtofit2()
 
                 swApp.ArrangeWindows(2)
+
+                System.Windows.Forms.MessageBox.Show("断面図のハッチングが存在します。" & vbCrLf &
+                                                     "SW APIの問題で、色が変わらない可能性があるので、" & vbCrLf &
+                                                     "色が変わっていないハッチングを目視で確認してください。")
 
             End If
 
@@ -1551,7 +1551,7 @@ Public Class clsSolidControl
                 ansStr += swFace.GetArea.ToString
                 'ansStr += (swFaceHatch.Angle * 57.3).ToString
                 'ansStr += " " + swFaceHatch.Color.ToString
-                ansStr += " " + swFaceHatch.Definition.ToString
+                'ansStr += " " + swFaceHatch.Definition.ToString
                 ansStr += " " + swFaceHatch.Layer.ToString
                 ansStr += " " + swFaceHatch.Pattern.ToString
                 ansStr += " " + swFaceHatch.Scale2.ToString
