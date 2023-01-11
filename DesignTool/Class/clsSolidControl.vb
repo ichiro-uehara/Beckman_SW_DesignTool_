@@ -140,6 +140,9 @@ Public Class clsSolidControl
             Dim oldLayerName As List(Of String) = New List(Of String)
             Dim newLayerName As List(Of String) = New List(Of String)
 
+            Dim oldLayerNamef As List(Of String) = New List(Of String)
+            Dim newLayerNamef As List(Of String) = New List(Of String)
+
             Dim oldfaceLayerName As String = ""
             Dim newfaceLayerName As String = ""
 
@@ -579,45 +582,52 @@ Public Class clsSolidControl
                 If hatchList2.Count <> 0 Then
                     Do
                         For Each hatch In hatchList2
+                            Dim layflg As Integer = 0
                             For Each lay In layerList
                                 Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
                                 If currentLayer.Name = hatch.Layer.ToString() Then
                                     If i = 0 Then
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                        ''oldLayerName.Add("COMP" + currentLayer.Name)
-                                        oldfaceLayerName = "COMP" + currentLayer.Name
-                                        Exit Do
+                                        oldLayerNamef.Add("COMP" + currentLayer.Name)
+                                        layflg = 1
+                                        'oldfaceLayerName = "COMP" + currentLayer.Name
+                                        'Exit Do
                                     Else
                                         swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color2), currentLayer.Style, currentLayer.Width, True, True)
-                                        ''newLayerName.Add("COMP" + currentLayer.Name)
-                                        newfaceLayerName = "COMP" + currentLayer.Name
-                                        Exit Do
+                                        newLayerNamef.Add("COMP" + currentLayer.Name)
+                                        layflg = 1
+                                        'newfaceLayerName = "COMP" + currentLayer.Name
+                                        'Exit Do
                                     End If
 
                                     Exit For
                                 End If
                             Next
-                        Next
 
-                        If i = 0 Then
-                            If (oldfaceLayerName = "") Then
-                                For Each lay In layerList
-                                    Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                    oldfaceLayerName = "COMP" + currentLayer.Name
-                                    Exit Do
-                                Next
+                            If i = 0 Then
+                                'If (oldfaceLayerName = "") Then
+                                If layflg = 0 Then
+                                    For Each lay In layerList
+                                        Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
+                                        oldLayerNamef.Add("COMP" + currentLayer.Name)
+                                        'oldfaceLayerName = "COMP" + currentLayer.Name
+                                        Exit For
+                                    Next
+                                End If
+                            Else
+                                'If (newfaceLayerName = "") Then
+                                If layflg = 0 Then
+                                    For Each lay In layerList
+                                        Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
+                                        swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
+                                        newLayerNamef.Add("COMP" + currentLayer.Name)
+                                        'newfaceLayerName = "COMP" + currentLayer.Name
+                                        Exit For
+                                    Next
+                                End If
                             End If
-                        Else
-                            If (newfaceLayerName = "") Then
-                                For Each lay In layerList
-                                    Dim currentLayer As Layer = swLayerMgr.GetLayer(lay)
-                                    swDraw.CreateLayer2("COMP" + currentLayer.Name, "", CInt(color1), currentLayer.Style, currentLayer.Width, True, True)
-                                    newfaceLayerName = "COMP" + currentLayer.Name
-                                    Exit Do
-                                Next
-                            End If
-                        End If
+                        Next
 
                         Exit Do
                     Loop
@@ -705,6 +715,9 @@ Public Class clsSolidControl
 
             Dim oldLayerName2 As New List(Of String)
             Dim newLayerName2 As New List(Of String)
+
+            Dim oldLayerNamef2 As New List(Of String)
+            Dim newLayerNamef2 As New List(Of String)
 
             Dim compCSVData2 As List(Of String) = New List(Of String)
 
@@ -865,6 +878,7 @@ Public Class clsSolidControl
                             newLayerName2.Add(newLayerName(i - annotations.Count))
                         ElseIf (newHatchListf.Count > 0 And newHatchListf.Count > i - annotations.Count - scount2) Then
                             newHatchListf2.Add(newHatchListf(i - annotations.Count - scount2))
+                            newLayerNamef2.Add(newLayerNamef(i - annotations.Count - scount2))
                         End If
 
                     End If
@@ -1006,6 +1020,7 @@ Public Class clsSolidControl
                             oldLayerName2.Add(oldLayerName(i - annotations2.Count))
                         ElseIf (oldHatchListf.Count > 0 And oldHatchListf.Count > i - annotations2.Count - scount) Then
                             oldHatchListf2.Add(oldHatchListf(i - annotations2.Count - scount))
+                            oldLayerNamef2.Add(oldLayerNamef(i - annotations2.Count - scount))
                         End If
                     End If
 
@@ -1156,8 +1171,8 @@ Public Class clsSolidControl
             If oldHatchListf2.Count > 0 Then
                 facehatchflg = 1
                 For j As Integer = 0 To oldHatchListf2.Count - 1
-                    'oldHatchListf2(j).Layer = oldLayerName2(j)
-                    oldHatchListf2(j).Layer = oldfaceLayerName
+                    oldHatchListf2(j).Layer = oldLayerNamef2(j)
+                    'oldHatchListf2(j).Layer = oldfaceLayerName
                 Next
             End If
 
@@ -1204,8 +1219,8 @@ Public Class clsSolidControl
             If newHatchListf2.Count > 0 Then
                 facehatchflg = 1
                 For j As Integer = 0 To newHatchListf2.Count - 1
-                    'newHatchListf2(j).Layer = oldLayerName2(j)
-                    newHatchListf2(j).Layer = newfaceLayerName
+                    newHatchListf2(j).Layer = newLayerNamef2(j)
+                    'newHatchListf2(j).Layer = newfaceLayerName
                 Next
             End If
 
@@ -1253,10 +1268,11 @@ Public Class clsSolidControl
 
                 swOldModel.Save()
                 swNewModel.Save()
-                swOldModel.ViewZoomtofit2()
-                swNewModel.ViewZoomtofit2()
 
                 swApp.ArrangeWindows(2)
+
+                swOldModel.ViewZoomtofit2()
+                swNewModel.ViewZoomtofit2()
 
                 System.Windows.Forms.MessageBox.Show("断面図のハッチングが存在します。" & vbCrLf &
                                                      "SW APIの問題で、色が変わらない可能性があるので、" & vbCrLf &
