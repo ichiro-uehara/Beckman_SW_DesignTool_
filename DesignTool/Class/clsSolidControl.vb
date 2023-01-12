@@ -1640,8 +1640,9 @@ Public Class clsSolidControl
         If Not vSketchHatch Is Nothing Then
 
             For Each swSketchHatch In vSketchHatch
-
-                ansStr += (swSketchHatch.Angle * 57.3).ToString
+                swFace = swSketchHatch.IGetFace2
+                ansStr += swFace.GetArea.ToString
+                ansStr += " " + (swSketchHatch.Angle * 57.3).ToString
                 'ansStr += " " + swSketchHatch.Color.ToString
                 ansStr += " " + swSketchHatch.GetID(0).ToString + swSketchHatch.GetID(1).ToString
                 ansStr += " " + swSketchHatch.Layer.ToString
