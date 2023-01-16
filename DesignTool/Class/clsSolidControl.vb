@@ -600,7 +600,7 @@ Public Class clsSolidControl
                                         'Exit Do
                                     End If
 
-                                    'Exit For
+                                    Exit For
                                 End If
                             Next
 
@@ -659,18 +659,18 @@ Public Class clsSolidControl
                 Next
 
                 If i = 0 Then
-                    scount = hatchingCsvData.Count
-                Else
-                    scount2 = hatchingCsvData.Count
-                End If
-
-                If (hatchList.Count > 0) Then
-                    If i = 0 Then
-                        oldHatchList = hatchList
+                        scount = hatchingCsvData.Count
                     Else
-                        newHatchList = hatchList
+                        scount2 = hatchingCsvData.Count
                     End If
-                End If
+
+                    If (hatchList.Count > 0) Then
+                        If i = 0 Then
+                            oldHatchList = hatchList
+                        Else
+                            newHatchList = hatchList
+                        End If
+                    End If
 
                 If (hatchList2.Count > 0) Then
                     If i = 0 Then
@@ -883,7 +883,7 @@ Public Class clsSolidControl
 
                     End If
 
-                        viewNewData.Add(newCsvData(i))
+                    viewNewData.Add(newCsvData(i))
                     noCompCSVData.Add(newCsvData(i))
                 End If
 
