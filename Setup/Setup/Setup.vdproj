@@ -100,7 +100,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\SW設計用アドインインストーラー_V105.msi"
+        "OutputFilename" = "8:Release\\SW設計用アドインインストーラー_V106.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -180,7 +180,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:v4.0 Client        "
+                "FrameworkVersion" = "8:v4.0 Client         "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -197,11 +197,11 @@
                 {
                     "_4F6D2C6C8293A37D4F051F9779C83C7B"
                     {
-                    "Name" = "8:SolidWorksTools.DLL"
+                    "Name" = "8:SolidWorksTools.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:SolidWorksTools.DLL"
+            "SourcePath" = "8:SolidWorksTools.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F1D4894ACB8942FAA5E08E119B489F05"
@@ -263,7 +263,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CDA1B0BD1E414FC9816E41FF9261F886"
@@ -366,15 +366,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SW設計用アドイン"
-        "ProductCode" = "8:{F0C4A9D7-B8E9-4D25-97A9-6B8C2D68E54F}"
-        "PackageCode" = "8:{56625596-C679-450A-9EC0-37E301C61A2D}"
+        "ProductCode" = "8:{2F1D8677-C6CA-4FCE-90A4-9BB8BBF95786}"
+        "PackageCode" = "8:{C8A1BE63-833A-4F6E-9C2A-5839FC5D604F}"
         "UpgradeCode" = "8:{F7E7B7B7-1F44-4AC4-99AD-E4FE59B3DDB7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.5"
+        "ProductVersion" = "8:1.0.6"
         "Manufacturer" = "8:ソフトキューブ株式会社"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

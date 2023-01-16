@@ -650,8 +650,8 @@ Public Class clsSolidControl
                     Next
                 End If
 
-                If (newLayerName.Count > 0 Or oldLayerName.Count > 0 Or newfaceLayerName IsNot "" Or oldfaceLayerName IsNot "") Then
-                    For j As Integer = 0 To hatchingCsvData.Count - 1
+                ' If (newLayerName.Count > 0 Or oldLayerName.Count > 0 Or newfaceLayerName IsNot "" Or oldfaceLayerName IsNot "") Then
+                For j As Integer = 0 To hatchingCsvData.Count - 1
                         solidCsvData.Add(hatchingCsvData(j))
                     Next
                     For j As Integer = 0 To hatchingCsvData2.Count - 1
@@ -679,7 +679,7 @@ Public Class clsSolidControl
                             newHatchListf = hatchList2
                         End If
                     End If
-                End If
+                ' End If
 
 
                 If i = 0 Then
