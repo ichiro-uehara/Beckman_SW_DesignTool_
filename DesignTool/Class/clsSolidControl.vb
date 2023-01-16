@@ -600,7 +600,7 @@ Public Class clsSolidControl
                                         'Exit Do
                                     End If
 
-                                    Exit For
+                                    'Exit For
                                 End If
                             Next
 
@@ -650,36 +650,36 @@ Public Class clsSolidControl
                     Next
                 End If
 
-                If (newLayerName.Count > 0 Or oldLayerName.Count > 0 Or newfaceLayerName IsNot "" Or oldfaceLayerName IsNot "") Then
-                    For j As Integer = 0 To hatchingCsvData.Count - 1
-                        solidCsvData.Add(hatchingCsvData(j))
-                    Next
-                    For j As Integer = 0 To hatchingCsvData2.Count - 1
-                        solidCsvData.Add(hatchingCsvData2(j))
-                    Next
+                'If (newLayerName.Count > 0 Or oldLayerName.Count > 0 Or newLayerNamef.Count > 0 Or oldLayerNamef.Count > 0) Then
+                For j As Integer = 0 To hatchingCsvData.Count - 1
+                    solidCsvData.Add(hatchingCsvData(j))
+                Next
+                For j As Integer = 0 To hatchingCsvData2.Count - 1
+                    solidCsvData.Add(hatchingCsvData2(j))
+                Next
 
+                If i = 0 Then
+                    scount = hatchingCsvData.Count
+                Else
+                    scount2 = hatchingCsvData.Count
+                End If
+
+                If (hatchList.Count > 0) Then
                     If i = 0 Then
-                        scount = hatchingCsvData.Count
+                        oldHatchList = hatchList
                     Else
-                        scount2 = hatchingCsvData.Count
-                    End If
-
-                    If (hatchList.Count > 0) Then
-                        If i = 0 Then
-                            oldHatchList = hatchList
-                        Else
-                            newHatchList = hatchList
-                        End If
-                    End If
-
-                    If (hatchList2.Count > 0) Then
-                        If i = 0 Then
-                            oldHatchListf = hatchList2
-                        Else
-                            newHatchListf = hatchList2
-                        End If
+                        newHatchList = hatchList
                     End If
                 End If
+
+                If (hatchList2.Count > 0) Then
+                    If i = 0 Then
+                        oldHatchListf = hatchList2
+                    Else
+                        newHatchListf = hatchList2
+                    End If
+                End If
+                'End If
 
 
                 If i = 0 Then
