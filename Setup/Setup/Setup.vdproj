@@ -100,7 +100,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\SW設計用アドインインストーラー_V106.msi"
+        "OutputFilename" = "8:Release\\SW設計用アドインインストーラー_V108.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -180,7 +180,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:v4.0 Client         "
+                "FrameworkVersion" = "8:v4.0 Client           "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -340,7 +340,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_F1D4894ACB8942FAA5E08E119B489F05"
             {
-            "DefaultLocation" = "8:C:\\SoftCube\\DesignTool"
+            "DefaultLocation" = "8:C:\\Program Files\\SoftCube\\DesignTool"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -367,7 +367,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SW設計用アドイン"
         "ProductCode" = "8:{2F1D8677-C6CA-4FCE-90A4-9BB8BBF95786}"
-        "PackageCode" = "8:{C8A1BE63-833A-4F6E-9C2A-5839FC5D604F}"
+        "PackageCode" = "8:{1A7358A7-2BEC-4C4A-BA83-65F69F2BC935}"
         "UpgradeCode" = "8:{F7E7B7B7-1F44-4AC4-99AD-E4FE59B3DDB7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

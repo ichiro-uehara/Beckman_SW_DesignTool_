@@ -5,7 +5,7 @@ Sub RegistAssembly(wshShell)
 	Dim commandLine
 
     commandLine = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe "'64bit compile
- 	commandLine = commandLine & "C:\Softcube\DesignTool\DesignTool.dll"
+ 	commandLine = commandLine & """C:\Program Files\Softcube\DesignTool\DesignTool.dll"""
 	commandLine = commandLine & " /u"
 
 	wshShell.Run commandLine, 0, true
