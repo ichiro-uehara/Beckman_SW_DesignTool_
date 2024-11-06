@@ -180,7 +180,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:v4.0 Client           "
+                "FrameworkVersion" = "8:v4.0 Client            "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -263,7 +263,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.4.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DesignTool, Version=1.1.5.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CDA1B0BD1E414FC9816E41FF9261F886"
@@ -366,15 +366,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SW設計用アドイン"
-        "ProductCode" = "8:{2F1D8677-C6CA-4FCE-90A4-9BB8BBF95786}"
-        "PackageCode" = "8:{1A7358A7-2BEC-4C4A-BA83-65F69F2BC935}"
+        "ProductCode" = "8:{1430CA6B-FF52-404E-A6A3-8B62FA3AC80A}"
+        "PackageCode" = "8:{7BAC917C-2327-41C3-8692-F0EB7CD61E32}"
         "UpgradeCode" = "8:{F7E7B7B7-1F44-4AC4-99AD-E4FE59B3DDB7}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.6"
+        "ProductVersion" = "8:1.0.8"
         "Manufacturer" = "8:ソフトキューブ株式会社"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
