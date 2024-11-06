@@ -34,7 +34,8 @@ Public Class clsDesignTool
     ' 備考      : IMAIZUMI ADD 2011/08/24
     Public Shared Function GetSWApp() As SldWorks
         Dim swApp As SldWorks
-        swApp = GetObject(, "SldWorks.Application")
+        swApp = GetObject(, "SldWorks.application.31")
+        'GetObject(, "SldWorks.Application")
         Return swApp
     End Function
 

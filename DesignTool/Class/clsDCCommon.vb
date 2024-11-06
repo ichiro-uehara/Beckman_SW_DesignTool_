@@ -45,9 +45,9 @@ Public Class clsDCCommon
 
         Try
 
-            GetSldWorksApp = GetObject(, "SldWorks.Application")
+            GetSldWorksApp = GetObject(, "SldWorks.Application.31")
             If (GetSldWorksApp Is Nothing) Then
-                GetSldWorksApp = CreateObject("SldWorks.Application")
+                GetSldWorksApp = CreateObject("SldWorks.Application.31")
             End If
 
         Catch
