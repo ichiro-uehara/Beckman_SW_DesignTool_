@@ -848,6 +848,10 @@ Public Class clsSolidControl
                         End If
 
                         ' 一致フラグON
+                        If (CompCsv2 = "") Then
+                            CompCsv2 = newCsvData(i) + clsDesignTool.m_SepValue + oldCsvData(j)
+                        End If
+
                         safeFlag2 = True
                         'Exit For
                         'End If
@@ -981,6 +985,10 @@ Public Class clsSolidControl
                         End If
 
                         ' 一致フラグON
+                        If (CompCsv = "") Then
+                            CompCsv = newCsvData(j) + clsDesignTool.m_SepValue + oldCsvData(i)
+                        End If
+
                         safeFlag2 = True
 
                         'Exit For
@@ -1031,16 +1039,16 @@ Public Class clsSolidControl
 
             Next
 
-            For i As Integer = 0 To compCSVData2.Count - 1
-                For j As Integer = 0 To compCSVData3.Count - 1
-                    If compCSVData2(i) = compCSVData3(j) Then
-                        compCSVData.Add(compCSVData2(i))
-                        compCSVData2(i) = "0"
-                        compCSVData3(j) = "0"
-                        Exit For
-                    End If
-                Next
-            Next
+            'For i As Integer = 0 To compCSVData2.Count - 1
+            '    For j As Integer = 0 To compCSVData3.Count - 1
+            '        If compCSVData2(i) = compCSVData3(j) Then
+            '            compCSVData.Add(compCSVData2(i))
+            '            compCSVData2(i) = "0"
+            '            compCSVData3(j) = "0"
+            '            Exit For
+            '        End If
+            '    Next
+            'Next
 
             Dim oldCsvData2 As New List(Of String)
             Dim newCsvData2 As New List(Of String)
@@ -1344,6 +1352,7 @@ Public Class clsSolidControl
             Dim dimen As Dimension = tempDimension.GetDimension
             Dim tempValues() As Double = dimen.GetValue3(1, "")
 
+            Dim dimtext As String = tempDimension.GetText(2)
 
             'Add by touga
             Dim Precision As Integer = tempDimension.GetPrimaryPrecision2
@@ -1522,6 +1531,10 @@ Public Class clsSolidControl
 
             If dimen.GetToleranceType = 1 Then
                 itemSymbol += "□"
+            End If
+
+            If dimtext IsNot "" Then
+                itemText += dimtext
             End If
 
             GetDimensionData = True
